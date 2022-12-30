@@ -11,20 +11,28 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { primary } from "../../configs/colors";
 import { InputProps } from "../../models/types";
 
-// import { Container } from './styles';
-
-export default function Input({ icon, type, option, placeholder }: InputProps) {
+export default function Input({
+  icon,
+  type,
+  option,
+  placeholder,
+  onChange,
+  disabled
+}: InputProps) {
   return (
     <View style={styles.container}>
       {icon.startsWith("ios") ? (
-        <Ionicons size={12} name={icon} style={styles.icon} />
+        <Ionicons size={14} name={icon} style={styles.icon} />
       ) : (
-        <MaterialIcons size={12} name={icon} style={styles.icon} />
+        <MaterialIcons size={14} name={icon} style={styles.icon} />
       )}
       <TextInput
+        style={styles.input}
         keyboardType={type === "email" ? "email-address" : "default"}
         secureTextEntry={type === "password"}
         placeholder={placeholder}
+        editable={disabled}
+        onChangeText={(text: string) => onChange(text)}
       />
       {option && (
         <TouchableOpacity onPress={option.action}>

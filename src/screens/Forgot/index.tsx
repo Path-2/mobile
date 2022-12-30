@@ -1,11 +1,10 @@
-import React from "react";
 import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function Profile() {
+export default function Forgot({ navigation }: any) {
   return (
     <SafeAreaView>
-      <Text>Profile</Text>
+      <Text>Forgot</Text>
     </SafeAreaView>
   );
 }

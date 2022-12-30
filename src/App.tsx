@@ -18,7 +18,6 @@ export default function App() {
           <Stack.Screen name={ScreenEnum.Signed} component={SignedScreen} />
           <Stack.Screen name={ScreenEnum.UnSigned} component={UnSignedScreen} />
         </Stack.Navigator>
-        <StatusBar style="auto" />
       </NavigationContainer>
       <StatusBar style="auto" />
     </SafeAreaProvider>

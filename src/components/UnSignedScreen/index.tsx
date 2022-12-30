@@ -2,14 +2,18 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { inactive, primary } from "../../configs/colors";
 import { ScreenEnum } from "../../models/enums";
-import { SignIn, SignUp } from "../../screens";
+import { SignIn, SignUp, Forgot } from "../../screens";
 
 export default function UnSignedScreen() {
   const Stack = createNativeStackNavigator();
   return (
-    <Stack.Navigator screenOptions={screenOptions}>
+    <Stack.Navigator
+      initialRouteName={ScreenEnum.SignIn}
+      screenOptions={screenOptions}
+    >
       <Stack.Screen name={ScreenEnum.SignIn} component={SignIn} />
       <Stack.Screen name={ScreenEnum.SignUp} component={SignUp} />
+      <Stack.Screen name={ScreenEnum.Forgot} component={Forgot} />
     </Stack.Navigator>
   );
 }
@@ -32,9 +36,7 @@ const screenOptions = ({ route }: any) => ({
         iconName = focused ? "ios-car" : "ios-car-outline";
         break;
       case ScreenEnum.Community:
-        iconName = focused
-          ? "ios-people-circle"
-          : "ios-people-circle-outline";
+        iconName = focused ? "ios-people-circle" : "ios-people-circle-outline";
         break;
     }
 
