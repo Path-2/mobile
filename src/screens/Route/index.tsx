@@ -1,11 +1,17 @@
-import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Text } from "react-native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { screenOptions } from "../../configs";
+import { ScreenEnum } from "../../models/enums";
+import ListAll from "./ListAll";
+import New from "./New";
 
-export default function Route() {
+export default function Routes() {
+
+  const {Navigator, Screen} = createNativeStackNavigator();
+
   return (
-    <SafeAreaView>
-      <Text>Route</Text>
-    </SafeAreaView>
+    <Navigator screenOptions={screenOptions}>
+      <Screen name={ScreenEnum.RouteListAll} component={ListAll} />
+      <Screen name={ScreenEnum.RouteNew} component={New} />
+    </Navigator>
   );
 }

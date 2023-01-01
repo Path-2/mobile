@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import FacebookIcon from "../../assets/icons/facebook.svg";
@@ -10,15 +10,18 @@ import { ScreenEnum } from "../../models/enums";
 import { Title } from "./styles";
 
 export default function SignIn({ navigation }: any) {
+  const [isProcessing, setIsProcessing] = React.useState<boolean>(false);
   const signup = React.useCallback(
     () => navigation.navigate(ScreenEnum.SignUp),
     []
   );
 
-  const login = React.useCallback(
-    () => navigation.navigate(ScreenEnum.Signed),
-    []
-  );
+  const login = React.useCallback(() => setIsProcessing(true), []);
+
+  React.useEffect(() => {
+    if (isProcessing)
+      setTimeout(() => navigation.navigate(ScreenEnum.Signed), 4000);
+  }, [isProcessing]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -29,9 +32,12 @@ export default function SignIn({ navigation }: any) {
       </View>
       <View>
         <Title>Login</Title>
-        <Input type="email" icon="alternate-email" placeholder="Email ID" onChange={function (newValue: any): void {
-         
-        } } />
+        <Input
+          type="email"
+          icon="alternate-email"
+          placeholder="Email ID"
+          onChange={function (newValue: any): void {}}
+        />
         <Input
           type="password"
           icon="ios-lock-closed-outline"
@@ -41,14 +47,15 @@ export default function SignIn({ navigation }: any) {
             action: () => {
               navigation.navigate(ScreenEnum.Forgot);
             },
-          }} onChange={function (newValue: any): void {
-            
-          } }        />
-        <TouchableOpacity
-          style={styles.loginButton}
-          onPress={login}
-        >
-          <Text style={styles.loginButtonText}>Entrar</Text>
+          }}
+          onChange={function (newValue: any): void {}}
+        />
+        <TouchableOpacity style={styles.loginButton} onPress={login}>
+          {isProcessing ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.loginButtonText}>Entrar</Text>
+          )}
         </TouchableOpacity>
       </View>
       <View style={styles.text}>
@@ -75,9 +82,9 @@ export default function SignIn({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
-    flex: 1
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    flex: 1,
   },
   loginOptions: {
     flexDirection: "row",

@@ -8,16 +8,16 @@ import { SignedScreen, UnSignedScreen } from "./components";
 import { screenOptions } from "./configs";
 
 export default function App() {
-  const Stack = createNativeStackNavigator();
+  const {Navigator, Screen} = createNativeStackNavigator();
 
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={screenOptions}>
-          <Stack.Screen name={ScreenEnum.Opening} component={Opening} />
-          <Stack.Screen name={ScreenEnum.Signed} component={SignedScreen} />
-          <Stack.Screen name={ScreenEnum.UnSigned} component={UnSignedScreen} />
-        </Stack.Navigator>
+        <Navigator screenOptions={screenOptions}>
+          <Screen name={ScreenEnum.Opening} component={Opening} />
+          <Screen name={ScreenEnum.Signed} component={SignedScreen} />
+          <Screen name={ScreenEnum.UnSigned} component={UnSignedScreen} />
+        </Navigator>
       </NavigationContainer>
       <StatusBar style="auto" />
     </SafeAreaProvider>

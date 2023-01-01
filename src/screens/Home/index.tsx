@@ -1,9 +1,9 @@
 import React from "react";
-import { Platform, StyleSheet } from "react-native";
+import { Text, StyleSheet } from "react-native";
 import MapView from "react-native-maps";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function Home() {
+export default function Home({route}: any) {
   const [location, setLocation] = React.useState<any>(null);
 
   React.useEffect(() => {
@@ -12,7 +12,6 @@ export default function Home() {
       if (status !== "granted") {
         return;
       }
-
       let location = {};
       setLocation(location);
     })();
@@ -20,7 +19,7 @@ export default function Home() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {Platform.OS === "web" ? (
+      {/*Platform.OS === "web" ? (
         <></>
       ) : (
         <MapView
@@ -35,7 +34,8 @@ export default function Home() {
           loadingEnabled
           mapType="hybrid"
         />
-      )}
+        )*/}
+        <Text>{route.params?.name}</Text>
     </SafeAreaView>
   );
 }

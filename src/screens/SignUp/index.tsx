@@ -1,5 +1,7 @@
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 import React from "react";
 import {
+  ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
@@ -20,6 +22,9 @@ export default function SignUp({ navigation }: any) {
     () => navigation.navigate(ScreenEnum.SignIn),
     []
   );
+  const [editDate, setEditDate] = React.useState<boolean>(false);
+  const [isProcessing, setIsProcessing] = React.useState<boolean>(false);
+
   return (
     <SafeAreaView style={styles.container}>
       <View>
@@ -38,7 +43,7 @@ export default function SignUp({ navigation }: any) {
           </TouchableOpacity>
         </View>
       </View>
-      <Text>Ou, cria conta com...</Text>
+      <Text style={{ marginBottom: 5 }}>Ou, cria conta com...</Text>
       <ScrollView>
         <View>
           <Input
@@ -50,7 +55,7 @@ export default function SignUp({ navigation }: any) {
           <Input
             icon={""}
             type={"text"}
-            placeholder={""}
+            placeholder={"BI"}
             onChange={function (newValue: any): void {}}
           />
           <Input
@@ -59,12 +64,21 @@ export default function SignUp({ navigation }: any) {
             placeholder="Email ID"
             onChange={function (newValue: any): void {}}
           />
+
           <Input
-            icon={""}
-            type={"text"}
-            placeholder={""}
+            type="text"
+            icon="ios-calendar-outline"
+            placeholder="dd/MM/yyyy"
+            disabled
+            option={{
+              action: () => {
+                setEditDate(true);
+              },
+              text: "",
+            }}
             onChange={function (newValue: any): void {}}
           />
+          {editDate && <RNDateTimePicker value={new Date()} />}
           <Input
             type="password"
             icon="ios-lock-closed-outline"
@@ -78,7 +92,11 @@ export default function SignUp({ navigation }: any) {
             onChange={function (newValue: any): void {}}
           />
           <TouchableOpacity style={styles.signupButton}>
-            <Text style={styles.signupButtonText}>Criar</Text>
+            {isProcessing ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.signupButtonText}>Criar</Text>
+            )}
           </TouchableOpacity>
         </View>
         <View style={styles.text}>

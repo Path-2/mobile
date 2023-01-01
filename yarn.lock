@@ -2242,6 +2242,14 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-native-autocomplete-input@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@types/react-native-autocomplete-input/-/react-native-autocomplete-input-5.1.0.tgz#635ddc6d1e939f6d5be122591ed342a1c4769737"
+  integrity sha512-ICXh3AM5aM2z9yFMg0jX5K+rVfFx+l8WxBt7R73Jmyeqe6/7+ynoC/uEuQiqWnMqG1+WirvEoKdxlcB1RwzPVQ==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
 "@types/react-native-vector-icons@^6.4.12":
   version "6.4.12"
   resolved "https://registry.npmjs.org/@types/react-native-vector-icons/-/react-native-vector-icons-6.4.12.tgz"

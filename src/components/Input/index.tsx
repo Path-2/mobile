@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { primary } from "../../configs/colors";
 import { InputProps } from "../../models/types";
 
@@ -17,12 +18,14 @@ export default function Input({
   option,
   placeholder,
   onChange,
-  disabled
+  disabled,
 }: InputProps) {
   return (
     <View style={styles.container}>
       {icon.startsWith("ios") ? (
         <Ionicons size={14} name={icon} style={styles.icon} />
+      ) : icon === "idcard" ? (
+        <AntDesign size={14} name="idcard" style={styles.icon} />
       ) : (
         <MaterialIcons size={14} name={icon} style={styles.icon} />
       )}
