@@ -1,24 +1,14 @@
-app/node_modules/
-app/.expo/
-app/dist/
-app/npm-debug.*
-app/*.jks
-app/*.p8
-app/*.p12
-app/*.key
-app/*.mobileprovision
-app/*.orig.*
-app/web-build/
+node_modules/
+.expo/
+dist/
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
 
 # macOS
-app/.DS_Store
-
-#backend
-path2-back/.ideia
-path2-back/.vscode
-path2-back/target
-path2-back/HELP.md
-
-#front
-path2-web/.vscode
-path2-web/node_modules
+.DS_Store
