@@ -1,14 +1,9 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import AntDesign from "react-native-vector-icons/AntDesign";
+
 import { primary } from "../../configs/colors";
 import { InputProps } from "../../models/types";
 
@@ -34,7 +29,7 @@ export default function Input({
         keyboardType={type === "email" ? "email-address" : "default"}
         secureTextEntry={type === "password"}
         placeholder={placeholder}
-        editable={disabled}
+        editable={!disabled}
         onChangeText={(text: string) => onChange(text)}
       />
       {option && (

@@ -1,11 +1,11 @@
+import * as Network from "expo-network";
 import React from "react";
-import { Modal, StyleSheet, Text, View, BackHandler } from "react-native";
+import { BackHandler, Modal, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import Rings from "../../components/Rings";
+import { Rings } from "../../components";
 import { primary } from "../../configs/colors";
 import { ScreenEnum } from "../../models/enums";
-import * as Network from "expo-network";
 
 export default function Opening({ navigation }: any) {
   const [forward, setForward] = React.useState<boolean>(false);

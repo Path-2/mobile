@@ -1,13 +1,6 @@
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import React from "react";
-import {
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import FacebookIcon from "../../assets/icons/facebook.svg";
@@ -22,8 +15,92 @@ export default function SignUp({ navigation }: any) {
     () => navigation.navigate(ScreenEnum.SignIn),
     []
   );
-  const [editDate, setEditDate] = React.useState<boolean>(false);
+
   const [isProcessing, setIsProcessing] = React.useState<boolean>(false);
+  const [isValidPassword, setIsValidPassword] = React.useState<boolean>(false);
+  const [isEqualsPassword, setIsEqualsPassword] =
+    React.useState<boolean>(false);
+  const [messageInvalidPassword, setMessageInvalidPassword] =
+    React.useState<string>("");
+  const [messageNotEqualsPassword, setMessageNotEqualsPassword] =
+    React.useState<string>("");
+
+  const [fullName, setFullName] = React.useState<string>("");
+  const [idCard, setIdCard] = React.useState<string>("");
+  const [email, setEmail] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
+  const [confirmPassword, setConfirmPassword] = React.useState<string>("");
+
+  const handleFullName = (text: string) => setFullName(text);
+  const handleIdCard = (text: string) => setIdCard(text);
+  const handleEmail = (text: string) => setEmail(text);
+  const handlePassword = (text: string) => setPassword(text);
+  const handleConfirmPassword = (text: string) => setConfirmPassword(text);
+
+  const handleSignup = React.useCallback(() => setIsProcessing(true), []);
+
+  React.useEffect(() => {
+    if (isProcessing)
+      setTimeout(() => navigation.navigate(ScreenEnum.Signed), 4000);
+  }, [isProcessing]);
+
+  React.useEffect(() => {}, [confirmPassword]);
+
+  React.useEffect(() => {
+    if (!isValidPassword)
+      setMessageInvalidPassword("Por favor insira uma senha forte e segura.");
+    else setMessageInvalidPassword("");
+  }, [isValidPassword]);
+
+  React.useEffect(() => {
+    if (password) {
+      const lower = [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e",
+        "f",
+        "g",
+        "h",
+        "i",
+        "j",
+        "k",
+        "l",
+        "m",
+        "n",
+        "o",
+        "p",
+        "q",
+        "r",
+        "s",
+        "t",
+        "u",
+        "v",
+        "w",
+        "x",
+        "y",
+        "z",
+      ];
+
+      const upper = lower.map((l) => l.toUpperCase());
+      const numeric = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
+      let hasNumber: boolean = false;
+      let hasUpper: boolean = false;
+      let hasLower: boolean = false;
+
+      for (const letter of password) {
+        if (lower.includes(letter)) hasLower = true;
+        else if (upper.includes(letter)) hasUpper = true;
+        else if (numeric.includes(letter)) hasNumber = true;
+      }
+
+      setIsValidPassword(
+        hasLower && hasUpper && hasNumber && password.length > 8
+      );
+    } else setMessageInvalidPassword("");
+  }, [password]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -50,48 +127,40 @@ export default function SignUp({ navigation }: any) {
             icon={"ios-person-outline"}
             type={"text"}
             placeholder={"Nome completo"}
-            onChange={function (newValue: any): void {}}
+            onChange={handleFullName}
           />
           <Input
             icon={""}
             type={"text"}
             placeholder={"BI"}
-            onChange={function (newValue: any): void {}}
+            onChange={handleIdCard}
           />
           <Input
             type="email"
             icon="alternate-email"
             placeholder="Email ID"
-            onChange={function (newValue: any): void {}}
+            onChange={handleEmail}
           />
-
-          <Input
-            type="text"
-            icon="ios-calendar-outline"
-            placeholder="dd/MM/yyyy"
-            disabled
-            option={{
-              action: () => {
-                setEditDate(true);
-              },
-              text: "",
-            }}
-            onChange={function (newValue: any): void {}}
-          />
-          {editDate && <RNDateTimePicker value={new Date()} />}
-          <Input
-            type="password"
-            icon="ios-lock-closed-outline"
-            placeholder="Senha"
-            onChange={function (newValue: any): void {}}
-          />
+          <View>
+            <Input
+              type="password"
+              icon="ios-lock-closed-outline"
+              placeholder="Senha"
+              onChange={handlePassword}
+            />
+            {messageInvalidPassword ? (
+              <Text style={{ color: "red" }}>{messageInvalidPassword}</Text>
+            ) : (
+              <></>
+            )}
+          </View>
           <Input
             type="password"
             icon="ios-lock-closed-outline"
             placeholder="Confirme a senha"
-            onChange={function (newValue: any): void {}}
+            onChange={handleConfirmPassword}
           />
-          <TouchableOpacity style={styles.signupButton}>
+          <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>
             {isProcessing ? (
               <ActivityIndicator color="#fff" />
             ) : (

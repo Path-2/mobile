@@ -1,11 +1,13 @@
 import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Opening } from "./screens";
-import { ScreenEnum } from "./models/enums";
-import { SignedScreen, UnSignedScreen } from "./components";
+
+import SignedScreen from "./components/SignedScreen";
+import UnSignedScreen from "./components/UnSignedScreen";
 import { screenOptions } from "./configs";
+import { ScreenEnum } from "./models/enums";
+import { Opening } from "./screens";
 
 export default function App() {
   const {Navigator, Screen} = createNativeStackNavigator();
