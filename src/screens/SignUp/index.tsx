@@ -16,7 +16,16 @@ import Input from "../../components/Input";
 import { primary } from "../../configs/colors";
 import { ScreenEnum } from "../../models/enums";
 import { useTheme } from "../../theme";
-import { validateEmail, validateIdCard, validatePassword } from "../../utils";
+import {
+  capitalize,
+  hasEnoughLength,
+  hasLowerCase,
+  hasNumeric,
+  hasUpperCase,
+  validateEmail,
+  validateIdCard,
+  validatePassword,
+} from "../../utils";
 import { Title } from "../SignIn/styles";
 
 export default function SignUp({ navigation }: any) {
@@ -32,7 +41,7 @@ export default function SignUp({ navigation }: any) {
   const [isEqualsPassword, setIsEqualsPassword] =
     React.useState<boolean>(false);
 
-  const [messageInvalidPassword, setMessageInvalidPassword] =
+  const [messageWarningPassword, setMessageWarningPassword] =
     React.useState<string>("");
   const [messageInvalidIdCard, setMessageInvalidIdCard] =
     React.useState<string>("");
@@ -49,9 +58,11 @@ export default function SignUp({ navigation }: any) {
 
   const { colors } = useTheme();
 
-  const handleFullName = (text: string) => setFullName(text);
-  const handleIdCard = (text: string) => setIdCard(text);
-  const handleEmail = (text: string) => setEmail(text);
+  const handleFullName = (text: string) => setFullName(capitalize(text));
+  const handleIdCard = (text: string) => setIdCard(text.toUpperCase());
+  const handleEmail = (text: string) => {
+    if (!text.includes("..")) setEmail(text.toLowerCase());
+  };
   const handlePassword = (text: string) => setPassword(text);
   const handleConfirmPassword = (text: string) => setConfirmPassword(text);
 
@@ -71,14 +82,18 @@ export default function SignUp({ navigation }: any) {
   }, [email]);
 
   React.useEffect(() => {
-    if (!isValidPassword)
-      setMessageInvalidPassword("Por favor insira uma senha forte e segura.");
-    else setMessageInvalidPassword("");
-  }, [isValidPassword]);
+    const warnings: string[] = [];
 
-  React.useEffect(() => {
-    if (password) setIsValidPassword(validatePassword(password));
-    else setMessageInvalidPassword("");
+    if (password) {
+      setIsValidPassword(validatePassword(password));
+
+      if (!hasNumeric(password)) warnings.push("um número");
+      if (!hasLowerCase(password)) warnings.push("um caracter minúsculo");
+      if (!hasUpperCase(password)) warnings.push("um caracter maiúsculo");
+      if (!hasEnoughLength(password, 8)) warnings.push("8 dígitos");
+
+      setMessageWarningPassword(warnings.join(", "));
+    } else setMessageWarningPassword("");
   }, [password]);
 
   React.useEffect(() => {
@@ -127,6 +142,7 @@ export default function SignUp({ navigation }: any) {
             type={"text"}
             placeholder={"Nome completo"}
             onChange={handleFullName}
+            value={fullName}
             style={{ color: colors.text }}
           />
           <View>
@@ -135,6 +151,8 @@ export default function SignUp({ navigation }: any) {
               type={"text"}
               placeholder={"Bilhete de Identidade"}
               onChange={handleIdCard}
+              value={idCard}
+              limit={14}
               style={{ color: colors.text }}
             />
             {messageInvalidIdCard ? (
@@ -149,6 +167,7 @@ export default function SignUp({ navigation }: any) {
               icon="alternate-email"
               placeholder="Email ID"
               onChange={handleEmail}
+              value={email}
               style={{ color: colors.text }}
             />
             {messageInvalidEmail ? (
@@ -163,10 +182,13 @@ export default function SignUp({ navigation }: any) {
               icon="ios-lock-closed-outline"
               placeholder="Senha"
               onChange={handlePassword}
+              value={password}
               style={{ color: colors.text }}
             />
-            {messageInvalidPassword ? (
-              <Text style={{ color: "red" }}>{messageInvalidPassword}</Text>
+            {messageWarningPassword ? (
+              <Text style={{ color: "orange" }}>
+                Insira pelo menos{" " + messageWarningPassword}
+              </Text>
             ) : (
               <></>
             )}
@@ -176,6 +198,7 @@ export default function SignUp({ navigation }: any) {
             icon="ios-lock-closed-outline"
             placeholder="Confirme a senha"
             onChange={handleConfirmPassword}
+            value={confirmPassword}
             style={{ color: colors.text }}
           />
           <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>

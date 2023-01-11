@@ -11,20 +11,31 @@ import { useTheme } from "../../theme";
 export default function Opening({ navigation }: any) {
   const { colors } = useTheme();
   const [forward, setForward] = React.useState<boolean>(false);
+  const [message, setMessage] = React.useState<string>("");
   const [alert, setAlert] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     Network.getNetworkStateAsync().then((state) => {
       if (state.isConnected)
-        setTimeout(() => navigation.navigate(ScreenEnum.UnSigned), 5000);
+        setTimeout(() => {
+          setAlert(false);
+          navigation.navigate(ScreenEnum.UnSigned);
+        }, 5000);
       else {
         setTimeout(() => {
+          setMessage(
+            "Pareces estar sem internet, alguns recursos estarão limitados..."
+          );
           setAlert(true);
+          setTimeout(() => {
+            setAlert(false);
+            navigation.navigate(ScreenEnum.UnSigned);
+          }, 5000);
         }, 5000);
 
         setTimeout(() => {
           BackHandler.exitApp();
-        }, 7000);
+        }, 7 * 1000);
       }
     });
   }, []);
@@ -46,9 +57,7 @@ export default function Opening({ navigation }: any) {
               alignItems: "center",
             }}
           >
-            <Text style={{ color: "#fff" }}>
-              Pareces estar sem net, tente mais tarde!
-            </Text>
+            <Text style={{ color: "#fff" }}>{message}</Text>
           </View>
         </Modal>
       }

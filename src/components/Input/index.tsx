@@ -19,7 +19,9 @@ export default function Input({
   option,
   placeholder,
   onChange,
+  value,
   disabled,
+  limit,
   style,
 }: InputProps) {
   return (
@@ -52,7 +54,10 @@ export default function Input({
         secureTextEntry={type === "password"}
         placeholder={placeholder}
         editable={!disabled}
-        onChangeText={(text: string) => onChange(text)}
+        value={value?.substring(0, limit)}
+        onChangeText={(text: string) => {
+          if (limit! >= text.length || !limit) onChange(text);
+        }}
       />
       {option && (
         <TouchableOpacity onPress={option.action}>
