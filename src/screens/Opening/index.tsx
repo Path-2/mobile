@@ -6,8 +6,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Rings } from "../../components";
 import { primary } from "../../configs/colors";
 import { ScreenEnum } from "../../models/enums";
+import { useTheme } from "../../theme";
 
 export default function Opening({ navigation }: any) {
+  const { colors } = useTheme();
   const [forward, setForward] = React.useState<boolean>(false);
   const [alert, setAlert] = React.useState<boolean>(false);
 
@@ -28,7 +30,9 @@ export default function Opening({ navigation }: any) {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={{ ...styles.container, backgroundColor: colors.background }}
+    >
       <Text style={styles.text}>Path2</Text>
       <Rings delay={500} />
       {

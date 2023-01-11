@@ -1,6 +1,13 @@
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import React from "react";
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import FacebookIcon from "../../assets/icons/facebook.svg";
@@ -8,6 +15,7 @@ import GoogleIcon from "../../assets/icons/google.svg";
 import Input from "../../components/Input";
 import { primary } from "../../configs/colors";
 import { ScreenEnum } from "../../models/enums";
+import { validatePassword } from "../../utils";
 import { Title } from "../SignIn/styles";
 
 export default function SignUp({ navigation }: any) {
@@ -54,51 +62,7 @@ export default function SignUp({ navigation }: any) {
 
   React.useEffect(() => {
     if (password) {
-      const lower = [
-        "a",
-        "b",
-        "c",
-        "d",
-        "e",
-        "f",
-        "g",
-        "h",
-        "i",
-        "j",
-        "k",
-        "l",
-        "m",
-        "n",
-        "o",
-        "p",
-        "q",
-        "r",
-        "s",
-        "t",
-        "u",
-        "v",
-        "w",
-        "x",
-        "y",
-        "z",
-      ];
-
-      const upper = lower.map((l) => l.toUpperCase());
-      const numeric = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-
-      let hasNumber: boolean = false;
-      let hasUpper: boolean = false;
-      let hasLower: boolean = false;
-
-      for (const letter of password) {
-        if (lower.includes(letter)) hasLower = true;
-        else if (upper.includes(letter)) hasUpper = true;
-        else if (numeric.includes(letter)) hasNumber = true;
-      }
-
-      setIsValidPassword(
-        hasLower && hasUpper && hasNumber && password.length > 8
-      );
+      setIsValidPassword(validatePassword(password));
     } else setMessageInvalidPassword("");
   }, [password]);
 

@@ -1,5 +1,11 @@
 import React from "react";
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import FacebookIcon from "../../assets/icons/facebook.svg";
@@ -7,6 +13,7 @@ import GoogleIcon from "../../assets/icons/google.svg";
 import Input from "../../components/Input";
 import { primary } from "../../configs/colors";
 import { ScreenEnum } from "../../models/enums";
+import { useTheme } from "../../theme";
 import { Title } from "./styles";
 
 export default function SignIn({ navigation }: any) {
@@ -16,6 +23,8 @@ export default function SignIn({ navigation }: any) {
     []
   );
 
+  const { colors } = useTheme();
+
   const login = React.useCallback(() => setIsProcessing(true), []);
 
   React.useEffect(() => {
@@ -24,24 +33,28 @@ export default function SignIn({ navigation }: any) {
   }, [isProcessing]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={{ ...styles.container, backgroundColor: colors.background }}
+    >
       <View>
         <Text style={{ fontSize: 90, textAlign: "center", color: primary }}>
           Path2
         </Text>
       </View>
       <View>
-        <Title>Login</Title>
+        <Title style={{ color: colors.text }}>Login</Title>
         <Input
           type="email"
           icon="alternate-email"
           placeholder="Email ID"
           onChange={function (newValue: any): void {}}
+          style={{ color: colors.text }}
         />
         <Input
           type="password"
           icon="ios-lock-closed-outline"
           placeholder="Senha"
+          style={{ color: colors.text }}
           option={{
             text: "Esqueceu?",
             action: () => {
@@ -59,7 +72,7 @@ export default function SignIn({ navigation }: any) {
         </TouchableOpacity>
       </View>
       <View style={styles.text}>
-        <Text>Ou, entrar com</Text>
+        <Text style={{ color: colors.text }}>Ou, entrar com</Text>
       </View>
       <View style={styles.loginOptions}>
         <TouchableOpacity style={styles.loginOptionsButton}>
@@ -70,7 +83,7 @@ export default function SignIn({ navigation }: any) {
         </TouchableOpacity>
       </View>
       <View style={styles.text}>
-        <Text>Novo no PATH2?</Text>
+        <Text style={{ color: colors.text }}>Novo no PATH2?</Text>
         <TouchableOpacity onPress={signup} style={{ marginLeft: 3 }}>
           <Text style={{ color: primary }}>Criar conta</Text>
         </TouchableOpacity>

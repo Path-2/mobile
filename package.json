@@ -7,8 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "SET NODE_OPTIONS=--openssl-legacy-provider &&expo start --web",
-    "offline": "SET NODE_OPTIONS=--openssl-legacy-provider && expo start --offline",
-    "offline:web": "SET NODE_OPTIONS=--openssl-legacy-provider && expo start --web --offline"
+    "off": "SET NODE_OPTIONS=--openssl-legacy-provider && expo start --offline",
+    "off:web": "SET NODE_OPTIONS=--openssl-legacy-provider && expo start --web --offline"
   },
   "dependencies": {
     "@expo/webpack-config": "^0.17.2",
@@ -19,6 +19,7 @@
     "@react-navigation/bottom-tabs": "^6.5.2",
     "@react-navigation/native": "^6.1.1",
     "@react-navigation/native-stack": "^6.9.7",
+    "@unimodules/react-native-adapter": "^6.3.9",
     "axios": "^1.2.2",
     "expo": "~47.0.8",
     "expo-camera": "~13.1.0",

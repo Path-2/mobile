@@ -4,6 +4,7 @@ export type InputProps = {
   type: string;
   placeholder: string;
   disabled?: boolean;
+  style?: { backgroundColor?: string; color?: string };
   onChange: (newValue: any) => void;
 };
 

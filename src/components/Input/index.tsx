@@ -1,5 +1,11 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -14,18 +20,27 @@ export default function Input({
   placeholder,
   onChange,
   disabled,
+  style,
 }: InputProps) {
   return (
     <View style={styles.container}>
       {icon.startsWith("ios") ? (
-        <Ionicons size={14} name={icon} style={styles.icon} />
+        <Ionicons size={14} name={icon} style={{ ...styles.icon, ...style }} color={style?.color} />
       ) : icon === "idcard" ? (
-        <AntDesign size={14} name="idcard" style={styles.icon} />
+        <AntDesign
+          size={14}
+          name="idcard"
+          style={{ ...styles.icon, ...style }}
+        />
       ) : (
-        <MaterialIcons size={14} name={icon} style={styles.icon} />
+        <MaterialIcons
+          size={14}
+          name={icon}
+          style={{ ...styles.icon, ...style }}
+        />
       )}
       <TextInput
-        style={styles.input}
+        style={{ ...styles.input, ...style }}
         keyboardType={type === "email" ? "email-address" : "default"}
         secureTextEntry={type === "password"}
         placeholder={placeholder}
