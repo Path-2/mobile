@@ -68,7 +68,20 @@ export default function SignUp({ navigation }: any) {
 
   const handleSignup = React.useCallback(() => setIsProcessing(true), []);
 
-  React.useEffect(() => {}, [confirmPassword]);
+  React.useEffect(() => {
+    if (!(confirmPassword && password)) {
+      setMessageNotEqualsPassword("");
+      setIsEqualsPassword(false);
+    } else if (confirmPassword.length === password.length) {
+      setIsEqualsPassword(confirmPassword === password);
+      setMessageNotEqualsPassword(
+        confirmPassword === password ? "" : "Senhas diferentes."
+      );
+    } else {
+      setIsEqualsPassword(false);
+      setMessageNotEqualsPassword("Senhas diferentes.");
+    }
+  }, [confirmPassword]);
 
   React.useEffect(() => {
     if (!isValidEmail)
@@ -93,6 +106,21 @@ export default function SignUp({ navigation }: any) {
       if (!hasEnoughLength(password, 8)) warnings.push("8 dígitos");
 
       setMessageWarningPassword(warnings.join(", "));
+
+      if (confirmPassword) {
+        if (!(confirmPassword && password)) {
+          setMessageNotEqualsPassword("");
+          setIsEqualsPassword(false);
+        } else if (confirmPassword.length === password.length) {
+          setIsEqualsPassword(confirmPassword === password);
+          setMessageNotEqualsPassword(
+            confirmPassword === password ? "" : "Senhas diferentes."
+          );
+        } else {
+          setIsEqualsPassword(false);
+          setMessageNotEqualsPassword("Senhas diferentes.");
+        }
+      }
     } else setMessageWarningPassword("");
   }, [password]);
 
@@ -193,14 +221,21 @@ export default function SignUp({ navigation }: any) {
               <></>
             )}
           </View>
-          <Input
-            type="password"
-            icon="ios-lock-closed-outline"
-            placeholder="Confirme a senha"
-            onChange={handleConfirmPassword}
-            value={confirmPassword}
-            style={{ color: colors.text }}
-          />
+          <View>
+            <Input
+              type="password"
+              icon="ios-lock-closed-outline"
+              placeholder="Confirme a senha"
+              onChange={handleConfirmPassword}
+              value={confirmPassword}
+              style={{ color: colors.text }}
+            />
+            {messageNotEqualsPassword ? (
+              <Text style={{ color: "red" }}>{messageNotEqualsPassword}</Text>
+            ) : (
+              <></>
+            )}
+          </View>
           <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>
             {isProcessing ? (
               <ActivityIndicator color="#fff" />
