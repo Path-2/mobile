@@ -25,18 +25,25 @@ export default function Input({
   return (
     <View style={styles.container}>
       {icon.startsWith("ios") ? (
-        <Ionicons size={14} name={icon} style={{ ...styles.icon, ...style }} color={style?.color} />
+        <Ionicons
+          size={14}
+          name={icon}
+          style={{ ...styles.icon, ...style }}
+          color={style?.color}
+        />
       ) : icon === "idcard" ? (
         <AntDesign
           size={14}
           name="idcard"
           style={{ ...styles.icon, ...style }}
+          color={style?.color}
         />
       ) : (
         <MaterialIcons
           size={14}
           name={icon}
           style={{ ...styles.icon, ...style }}
+          color={style?.color}
         />
       )}
       <TextInput

@@ -39,7 +39,7 @@ export default function Home({ route }: any) {
           mapType="hybrid"
         />
         )*/}
-      <Text>{route.params?.name}</Text>
+      <Text style={{ color: colors.text }}>{route.params?.name}</Text>
     </SafeAreaView>
   );
 }

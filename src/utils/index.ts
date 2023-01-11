@@ -43,3 +43,11 @@ export function validatePassword(password: string): boolean {
 
   return hasLower && hasUpper && hasNumber && password.length > 8;
 }
+
+export function validateIdCard(idCard: string): boolean {
+  return /[0-9]{9}[A-Za-z]{2}[0-9]{3}/.test(idCard);
+}
+
+export function validateEmail(email: string):boolean {
+  return /[a-z0-9]{2,}([._][a-z0-9]{2,})*@[a-z]{2,}([._][a-z0-9]{2,})*[.][a-z]{2,}/g.test(email)
+}

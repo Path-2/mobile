@@ -1,5 +1,6 @@
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { ScreenEnum } from "../models/enums";
+import { useTheme } from "../theme";
 
 export const screenOptions = ({ route }: any) => ({
   tabBarIcon: ({ focused, color, size }: any) => {
@@ -29,4 +30,5 @@ export const screenOptions = ({ route }: any) => ({
   tabBarActiveTintColor: "#403FFB",
   tabBarInactiveTintColor: "#42414F",
   headerShown: false,
+  tabBarStyle: { backgroundColor: useTheme().colors.background },
 });
