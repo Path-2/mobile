@@ -35,9 +35,9 @@ export default function SignUp({ navigation }: any) {
   );
 
   const [isProcessing, setIsProcessing] = React.useState<boolean>(false);
-  const [isValidPassword, setIsValidPassword] = React.useState<boolean>(true);
-  const [isValidIdCard, setIsValidIdCard] = React.useState<boolean>(true);
-  const [isValidEmail, setIsValidEmail] = React.useState<boolean>(true);
+  const [isValidPassword, setIsValidPassword] = React.useState<boolean>(false);
+  const [isValidIdCard, setIsValidIdCard] = React.useState<boolean>(false);
+  const [isValidEmail, setIsValidEmail] = React.useState<boolean>(false);
   const [isEqualsPassword, setIsEqualsPassword] =
     React.useState<boolean>(false);
 
@@ -106,7 +106,6 @@ export default function SignUp({ navigation }: any) {
       if (!hasEnoughLength(password, 8)) warnings.push("8 dígitos");
 
       setMessageWarningPassword(warnings.join(", "));
-
     } else setMessageWarningPassword("");
 
     if (!(confirmPassword && password)) {
@@ -235,7 +234,17 @@ export default function SignUp({ navigation }: any) {
               <></>
             )}
           </View>
-          <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>
+          <TouchableOpacity
+            disabled={
+              !isEqualsPassword ||
+              !isValidEmail ||
+              !isValidIdCard ||
+              !isValidPassword ||
+              !fullName
+            }
+            style={styles.signupButton}
+            onPress={handleSignup}
+          >
             {isProcessing ? (
               <ActivityIndicator color="#fff" />
             ) : (
