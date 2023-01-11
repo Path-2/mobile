@@ -107,21 +107,20 @@ export default function SignUp({ navigation }: any) {
 
       setMessageWarningPassword(warnings.join(", "));
 
-      if (confirmPassword) {
-        if (!(confirmPassword && password)) {
-          setMessageNotEqualsPassword("");
-          setIsEqualsPassword(false);
-        } else if (confirmPassword.length === password.length) {
-          setIsEqualsPassword(confirmPassword === password);
-          setMessageNotEqualsPassword(
-            confirmPassword === password ? "" : "Senhas diferentes."
-          );
-        } else {
-          setIsEqualsPassword(false);
-          setMessageNotEqualsPassword("Senhas diferentes.");
-        }
-      }
     } else setMessageWarningPassword("");
+
+    if (!(confirmPassword && password)) {
+      setMessageNotEqualsPassword("");
+      setIsEqualsPassword(false);
+    } else if (confirmPassword.length === password.length) {
+      setIsEqualsPassword(confirmPassword === password);
+      setMessageNotEqualsPassword(
+        confirmPassword === password ? "" : "Senhas diferentes."
+      );
+    } else {
+      setIsEqualsPassword(false);
+      setMessageNotEqualsPassword("Senhas diferentes.");
+    }
   }, [password]);
 
   React.useEffect(() => {
