@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Rings } from "../../components";
 import { primary } from "../../configs/colors";
 import { ScreenEnum } from "../../models/enums";
-import { useTheme } from "../../theme";
+import { useTheme } from "../../hooks/theme";
 
 export default function Opening({ navigation }: any) {
   const { colors } = useTheme();

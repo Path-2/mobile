@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -24,6 +18,11 @@ export default function Input({
   limit,
   style,
 }: InputProps) {
+  const getType = (type: string) => {
+    if (type === "phone" || type === "tel") return "phone-pad";
+    else if (type === "email") return "email-address";
+    else return "default";
+  };
   return (
     <View style={styles.container}>
       {icon.startsWith("ios") ? (
@@ -50,7 +49,7 @@ export default function Input({
       )}
       <TextInput
         style={{ ...styles.input, ...style }}
-        keyboardType={type === "email" ? "email-address" : "default"}
+        keyboardType={getType(type)}
         secureTextEntry={type === "password"}
         placeholder={placeholder}
         editable={!disabled}

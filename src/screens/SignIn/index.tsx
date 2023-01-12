@@ -13,7 +13,7 @@ import GoogleIcon from "../../assets/icons/google.svg";
 import Input from "../../components/Input";
 import { primary } from "../../configs/colors";
 import { ScreenEnum } from "../../models/enums";
-import { useTheme } from "../../theme";
+import { useTheme } from "../../hooks/theme";
 import { Title } from "./styles";
 
 export default function SignIn({ navigation }: any) {

@@ -74,3 +74,33 @@ export function capitalize(text: string): string {
         .map((s) => s[0].toUpperCase() + s.substring(1))
         .reduce((a, b) => a + " " + b);
 }
+
+export function validatePhone(phone: string): boolean {
+  return /[9][1-9][0-9]{7}/.test(phone);
+}
+
+export function mask(value: string, mask: string): string {
+  let masked: string = "";
+
+  for (let i = 0, j = 0; i < value.length && j < mask.length; ) {
+    if (value[i]) {
+      if (mask[j] === "x") {
+        masked += value[i];
+        i++;
+        j++;
+      } else {
+        masked += mask[j];
+        j++;
+      }
+    } else break;
+  }
+  return masked ? masked : value;
+}
+
+function symbols(text: string): Array<string> {
+  return text.split(/[A-Za-z0-9]/).filter((s) => s !== "");
+}
+
+function separateBySymbol(text: string): Array<string> {
+  return text.split(/[*/-\\ ,.<>|!"#$%&/()=?»«+*@]/).filter((s) => s !== "");
+}

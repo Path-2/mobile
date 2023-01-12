@@ -1,4 +1,3 @@
-import RNDateTimePicker from "@react-native-community/datetimepicker";
 import React from "react";
 import {
   ActivityIndicator,
@@ -14,18 +13,9 @@ import FacebookIcon from "../../assets/icons/facebook.svg";
 import GoogleIcon from "../../assets/icons/google.svg";
 import Input from "../../components/Input";
 import { primary } from "../../configs/colors";
+import { useTheme } from "../../hooks/theme";
 import { ScreenEnum } from "../../models/enums";
-import { useTheme } from "../../theme";
-import {
-  capitalize,
-  hasEnoughLength,
-  hasLowerCase,
-  hasNumeric,
-  hasUpperCase,
-  validateEmail,
-  validateIdCard,
-  validatePassword,
-} from "../../utils";
+import * as Utils from "../../utils";
 import { Title } from "../SignIn/styles";
 
 export default function SignUp({ navigation }: any) {
@@ -38,6 +28,7 @@ export default function SignUp({ navigation }: any) {
   const [isValidPassword, setIsValidPassword] = React.useState<boolean>(false);
   const [isValidIdCard, setIsValidIdCard] = React.useState<boolean>(false);
   const [isValidEmail, setIsValidEmail] = React.useState<boolean>(false);
+  const [isValidPhone, setIsValidPhone] = React.useState<boolean>(false);
   const [isEqualsPassword, setIsEqualsPassword] =
     React.useState<boolean>(false);
 
@@ -47,22 +38,27 @@ export default function SignUp({ navigation }: any) {
     React.useState<string>("");
   const [messageInvalidEmail, setMessageInvalidEmail] =
     React.useState<string>("");
+  const [messageInvalidPhone, setMessageInvalidPhone] =
+    React.useState<string>("");
   const [messageNotEqualsPassword, setMessageNotEqualsPassword] =
     React.useState<string>("");
 
   const [fullName, setFullName] = React.useState<string>("");
   const [idCard, setIdCard] = React.useState<string>("");
   const [email, setEmail] = React.useState<string>("");
+  const [phoneMasked, setPhoneMasked] = React.useState<string>("");
+  const [phone, setPhone] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
   const [confirmPassword, setConfirmPassword] = React.useState<string>("");
 
   const { colors } = useTheme();
 
-  const handleFullName = (text: string) => setFullName(capitalize(text));
+  const handleFullName = (text: string) => setFullName(Utils.capitalize(text));
   const handleIdCard = (text: string) => setIdCard(text.toUpperCase());
   const handleEmail = (text: string) => {
     if (!text.includes("..")) setEmail(text.toLowerCase());
   };
+  const handlePhone = (text: string) => setPhone(text);
   const handlePassword = (text: string) => setPassword(text);
   const handleConfirmPassword = (text: string) => setConfirmPassword(text);
 
@@ -90,7 +86,7 @@ export default function SignUp({ navigation }: any) {
   }, [isValidEmail]);
 
   React.useEffect(() => {
-    if (email) setIsValidEmail(validateEmail(email));
+    if (email) setIsValidEmail(Utils.validateEmail(email));
     else setIsValidEmail(true);
   }, [email]);
 
@@ -98,12 +94,12 @@ export default function SignUp({ navigation }: any) {
     const warnings: string[] = [];
 
     if (password) {
-      setIsValidPassword(validatePassword(password));
+      setIsValidPassword(Utils.validatePassword(password));
 
-      if (!hasNumeric(password)) warnings.push("um número");
-      if (!hasLowerCase(password)) warnings.push("um caracter minúsculo");
-      if (!hasUpperCase(password)) warnings.push("um caracter maiúsculo");
-      if (!hasEnoughLength(password, 8)) warnings.push("8 dígitos");
+      if (!Utils.hasNumeric(password)) warnings.push("um número");
+      if (!Utils.hasLowerCase(password)) warnings.push("um caracter minúsculo");
+      if (!Utils.hasUpperCase(password)) warnings.push("um caracter maiúsculo");
+      if (!Utils.hasEnoughLength(password, 8)) warnings.push("8 dígitos");
 
       setMessageWarningPassword(warnings.join(", "));
     } else setMessageWarningPassword("");
@@ -123,15 +119,31 @@ export default function SignUp({ navigation }: any) {
   }, [password]);
 
   React.useEffect(() => {
-    if (!isValidIdCard)
-      setMessageInvalidIdCard("Por favor insira um bi válido.");
+    if (!isValidIdCard) setMessageInvalidIdCard("bi inválido.");
     else setMessageInvalidIdCard("");
   }, [isValidIdCard]);
 
   React.useEffect(() => {
-    if (idCard) setIsValidIdCard(validateIdCard(idCard));
-    else setIsValidIdCard(true);
+    if (idCard) setIsValidIdCard(Utils.validateIdCard(idCard));
+    else {
+      setIsValidIdCard(true);
+      setMessageInvalidIdCard("");
+    }
   }, [idCard]);
+
+  React.useEffect(() => {
+    if (phone) {
+      setIsValidPhone(Utils.validatePhone(phone));
+      //setPhoneMasked(Utils.mask(phone, "xxx-xxx-xxx"));
+
+      if (!Utils.validatePhone(phone)) {
+        setMessageInvalidPhone("Número inválido.");
+      } else setMessageInvalidPhone("");
+    } else {
+      setIsValidPhone(false);
+      setMessageInvalidPhone("");
+    }
+  }, [phone]);
 
   React.useEffect(() => {
     if (isProcessing)
@@ -204,6 +216,22 @@ export default function SignUp({ navigation }: any) {
           </View>
           <View>
             <Input
+              type="tel"
+              icon="phone"
+              placeholder="(+244) xxx-xxx-xxx"
+              onChange={handlePhone}
+              value={phone}
+              limit={9}
+              style={{ color: colors.text }}
+            />
+            {messageInvalidPhone ? (
+              <Text style={{ color: "red" }}>{messageInvalidPhone}</Text>
+            ) : (
+              <></>
+            )}
+          </View>
+          <View>
+            <Input
               type="password"
               icon="ios-lock-closed-outline"
               placeholder="Senha"
@@ -229,7 +257,9 @@ export default function SignUp({ navigation }: any) {
               style={{ color: colors.text }}
             />
             {messageNotEqualsPassword ? (
-              <Text style={{ color: "red" }}>{messageNotEqualsPassword}</Text>
+              <Text style={{ color: "red", marginBottom: 10 }}>
+                {messageNotEqualsPassword}
+              </Text>
             ) : (
               <></>
             )}
