@@ -50,6 +50,7 @@ export default function Input({
       <TextInput
         style={{ ...styles.input, ...style }}
         keyboardType={getType(type)}
+        placeholderTextColor={style?.color}
         secureTextEntry={type === "password"}
         placeholder={placeholder}
         editable={!disabled}
