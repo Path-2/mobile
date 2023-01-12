@@ -14,7 +14,7 @@ export const ThemeProvider = (props: any) => {
   const colorScheme = useColorScheme(); // Can be dark | light | no-preference
 
   /*
-   * To enable changing the app theme dynamicly in the app (run-time)
+   * To enable changing the app theme dynamically in the app (run-time)
    * we're gonna use useState so we can override the default device theme
    */
   const [isDark, setIsDark] = React.useState(colorScheme === "dark");
@@ -26,7 +26,7 @@ export const ThemeProvider = (props: any) => {
 
   const defaultTheme = {
     isDark,
-    // Chaning color schemes according to theme
+    // Changing color schemes according to theme
     colors: isDark ? darkColors : lightColors,
     // Overrides the isDark value will cause re-render inside the context.
     setScheme: (scheme: any) => setIsDark(scheme === "dark"),
