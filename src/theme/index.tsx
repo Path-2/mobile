@@ -1,5 +1,5 @@
 import React from "react";
-import { useColorScheme } from "react-native-appearance";
+import { useColorScheme } from "react-native";
 
 import { darkColors, lightColors } from "./colors";
 
