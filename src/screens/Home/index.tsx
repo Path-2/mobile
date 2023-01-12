@@ -21,7 +21,7 @@ export default function Home({ route }: any) {
 
   return (
     <SafeAreaView
-      style={{ ...styles.container, backgroundColor: colors.background }}
+      style={{ ...styles.container, backgroundColor: colors.primary.bg }}
     >
       {/*Platform.OS === "web" ? (
         <></>
@@ -39,7 +39,7 @@ export default function Home({ route }: any) {
           mapType="hybrid"
         />
         )*/}
-      <Text style={{ color: colors.text }}>{route.params?.name}</Text>
+      <Text style={{ color: colors.primary.txt }}>{route.params?.name}</Text>
     </SafeAreaView>
   );
 }

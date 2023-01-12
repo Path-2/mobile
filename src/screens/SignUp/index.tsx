@@ -152,7 +152,7 @@ export default function SignUp({ navigation }: any) {
 
   return (
     <SafeAreaView
-      style={{ ...styles.container, backgroundColor: colors.background }}
+      style={{ ...styles.container, backgroundColor: colors.primary.bg }}
     >
       <View>
         <Text style={{ fontSize: 90, textAlign: "center", color: primary }}>
@@ -160,7 +160,7 @@ export default function SignUp({ navigation }: any) {
         </Text>
       </View>
       <View>
-        <Title style={{ color: colors.text }}>Criar Conta</Title>
+        <Title style={{ color: colors.primary.txt }}>Criar Conta</Title>
         <View style={styles.signupOptions}>
           <TouchableOpacity style={styles.signupOptionsButton}>
             <GoogleIcon height={30} width={30} />
@@ -170,7 +170,7 @@ export default function SignUp({ navigation }: any) {
           </TouchableOpacity>
         </View>
       </View>
-      <Text style={{ marginBottom: 5, color: colors.text }}>
+      <Text style={{ marginBottom: 5, color: colors.primary.txt }}>
         Ou, cria conta com...
       </Text>
       <ScrollView>
@@ -181,7 +181,7 @@ export default function SignUp({ navigation }: any) {
             placeholder={"Nome completo"}
             onChange={handleFullName}
             value={fullName}
-            style={{ color: colors.text }}
+            style={{ color: colors.primary.txt }}
           />
           <View>
             <Input
@@ -191,7 +191,7 @@ export default function SignUp({ navigation }: any) {
               onChange={handleIdCard}
               value={idCard}
               limit={14}
-              style={{ color: colors.text }}
+              style={{ color: colors.primary.txt }}
             />
             {messageInvalidIdCard ? (
               <Text style={{ color: "red" }}>{messageInvalidIdCard}</Text>
@@ -206,7 +206,7 @@ export default function SignUp({ navigation }: any) {
               placeholder="Email ID"
               onChange={handleEmail}
               value={email}
-              style={{ color: colors.text }}
+              style={{ color: colors.primary.txt }}
             />
             {messageInvalidEmail ? (
               <Text style={{ color: "red" }}>{messageInvalidEmail}</Text>
@@ -222,7 +222,7 @@ export default function SignUp({ navigation }: any) {
               onChange={handlePhone}
               value={phone}
               limit={9}
-              style={{ color: colors.text }}
+              style={{ color: colors.primary.txt }}
             />
             {messageInvalidPhone ? (
               <Text style={{ color: "red" }}>{messageInvalidPhone}</Text>
@@ -237,7 +237,7 @@ export default function SignUp({ navigation }: any) {
               placeholder="Senha"
               onChange={handlePassword}
               value={password}
-              style={{ color: colors.text }}
+              style={{ color: colors.primary.txt }}
             />
             {messageWarningPassword ? (
               <Text style={{ color: "orange" }}>
@@ -254,7 +254,7 @@ export default function SignUp({ navigation }: any) {
               placeholder="Confirme a senha"
               onChange={handleConfirmPassword}
               value={confirmPassword}
-              style={{ color: colors.text }}
+              style={{ color: colors.primary.txt }}
             />
             {messageNotEqualsPassword ? (
               <Text style={{ color: "red", marginBottom: 10 }}>
@@ -272,20 +272,20 @@ export default function SignUp({ navigation }: any) {
               !isValidPassword ||
               !fullName
             }
-            style={styles.signupButton}
+            style={{...styles.signupButton, backgroundColor: colors.primary.bgBt}}
             onPress={handleSignup}
           >
             {isProcessing ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text style={{ ...styles.signupButtonText, color: colors.text }}>
+              <Text style={{ color: colors.primary.txtBt }}>
                 Criar
               </Text>
             )}
           </TouchableOpacity>
         </View>
         <View style={styles.text}>
-          <Text style={{ color: colors.text }}>Já tens uma conta?</Text>
+          <Text style={{ color: colors.primary.txt }}>Já tens uma conta?</Text>
           <TouchableOpacity onPress={signIn} style={{ marginLeft: 3 }}>
             <Text style={{ color: primary }}>Login</Text>
           </TouchableOpacity>
@@ -297,7 +297,7 @@ export default function SignUp({ navigation }: any) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    padding: 15,
     flexDirection: "column",
     justifyContent: "space-evenly",
     flex: 1,
@@ -307,8 +307,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
   },
   signupOptionsButton: {
-    borderColor: "#ccc",
-    borderWidth: 1,
     paddingHorizontal: 15,
     paddingVertical: 5,
     borderRadius: 15,
@@ -320,14 +318,10 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   signupButton: {
-    backgroundColor: primary,
     padding: 10,
     borderRadius: 10,
     flexDirection: "row",
     justifyContent: "center",
     marginBottom: 20,
-  },
-  signupButtonText: {
-    color: "#fff",
-  },
+  }
 });

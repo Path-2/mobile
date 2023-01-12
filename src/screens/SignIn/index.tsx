@@ -34,7 +34,7 @@ export default function SignIn({ navigation }: any) {
 
   return (
     <SafeAreaView
-      style={{ ...styles.container, backgroundColor: colors.background }}
+      style={{ ...styles.container, backgroundColor: colors.primary.bg }}
     >
       <View>
         <Text style={{ fontSize: 90, textAlign: "center", color: primary }}>
@@ -42,21 +42,23 @@ export default function SignIn({ navigation }: any) {
         </Text>
       </View>
       <View>
-        <Title style={{ color: colors.text }}>Login</Title>
+        <Title style={{ color: colors.primary.txt }}>Login</Title>
         <Input
           type="email"
           icon="alternate-email"
           placeholder="Email ID"
           onChange={function (newValue: any): void {}}
-          style={{ color: colors.text }}
+          style={{ color: colors.primary.txt }}
         />
         <Input
           type="password"
           icon="ios-lock-closed-outline"
           placeholder="Senha"
-          style={{ color: colors.text }}
+          style={{ color: colors.primary.txt }}
           option={{
-            text: "Esqueceu?",
+            child: (
+              <Text style={{ color: colors.secondary.txt }}>Esqueceu?</Text>
+            ),
             action: () => {
               navigation.navigate(ScreenEnum.Forgot);
             },
@@ -67,12 +69,12 @@ export default function SignIn({ navigation }: any) {
           {isProcessing ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.loginButtonText}>Entrar</Text>
+            <Text style={{color: colors.primary.txtBt}}>Entrar</Text>
           )}
         </TouchableOpacity>
       </View>
       <View style={styles.text}>
-        <Text style={{ color: colors.text }}>Ou, entrar com</Text>
+        <Text style={{ color: colors.primary.txt }}>Ou, entrar com</Text>
       </View>
       <View style={styles.loginOptions}>
         <TouchableOpacity style={styles.loginOptionsButton}>
@@ -83,7 +85,7 @@ export default function SignIn({ navigation }: any) {
         </TouchableOpacity>
       </View>
       <View style={styles.text}>
-        <Text style={{ color: colors.text }}>Novo no PATH2?</Text>
+        <Text style={{ color: colors.primary.txt }}>Novo no PATH2?</Text>
         <TouchableOpacity onPress={signup} style={{ marginLeft: 3 }}>
           <Text style={{ color: primary }}>Criar conta</Text>
         </TouchableOpacity>
@@ -94,7 +96,7 @@ export default function SignIn({ navigation }: any) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    padding: 15,
     flexDirection: "column",
     justifyContent: "space-evenly",
     flex: 1,
@@ -104,8 +106,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
   },
   loginOptionsButton: {
-    borderColor: "#ccc",
-    borderWidth: 1,
     paddingHorizontal: 15,
     paddingVertical: 5,
     borderRadius: 15,
@@ -123,8 +123,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginBottom: 20,
-  },
-  loginButtonText: {
-    color: "#fff",
-  },
+  }
 });

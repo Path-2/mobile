@@ -61,7 +61,7 @@ export default function Input({
       />
       {option && (
         <TouchableOpacity onPress={option.action}>
-          <Text style={styles.optionText}>{option.text}</Text>
+          {option?.child}
         </TouchableOpacity>
       )}
     </View>
@@ -84,8 +84,5 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 5,
-  },
-  optionText: {
-    color: primary,
   },
 });

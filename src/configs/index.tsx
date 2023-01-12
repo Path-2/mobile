@@ -30,5 +30,5 @@ export const screenOptions = ({ route }: any) => ({
   tabBarActiveTintColor: "#403FFB",
   tabBarInactiveTintColor: "#42414F",
   headerShown: false,
-  tabBarStyle: { backgroundColor: useTheme().colors.background },
+  tabBarStyle: { backgroundColor: useTheme().colors.primary.bg },
 });

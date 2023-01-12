@@ -1,6 +1,6 @@
 export type InputProps = {
   icon: string;
-  option?: { text: string; action: () => void };
+  option?: { child: React.ReactNode; action: () => void };
   type: string;
   placeholder: string;
   disabled?: boolean;

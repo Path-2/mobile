@@ -2,6 +2,7 @@
   "expo": {
     "name": "path2",
     "slug": "path2",
+    "scheme": "path2",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "",
@@ -14,9 +15,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
