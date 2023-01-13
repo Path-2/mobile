@@ -1,5 +1,6 @@
 import React from "react";
 import { useColorScheme } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { darkColors, lightColors } from "./colors";
 
@@ -24,17 +25,20 @@ export const ThemeProvider = (props: any) => {
     setIsDark(colorScheme === "dark");
   }, [colorScheme]);
 
-  const defaultTheme = {
-    isDark,
-    // Changing color schemes according to theme
-    colors: isDark ? darkColors : lightColors,
-    // Overrides the isDark value will cause re-render inside the context.
-    setScheme: (scheme: any) => setIsDark(scheme === "dark"),
-  };
+  const defaultTheme = React.useMemo(
+    () => ({
+      isDark,
+      // Changing color schemes according to theme
+      colors: isDark ? darkColors : lightColors,
+      // Overrides the isDark value will cause re-render inside the context.
+      setScheme: (scheme: any) => setIsDark(scheme === "dark"),
+    }),
+    []
+  );
 
   return (
     <ThemeContext.Provider value={defaultTheme}>
-      {props.children}
+      <SafeAreaProvider>{props.children}</SafeAreaProvider>
     </ThemeContext.Provider>
   );
 };

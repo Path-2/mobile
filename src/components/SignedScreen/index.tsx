@@ -5,10 +5,12 @@ import { primary } from "../../configs/colors";
 import { ScreenEnum } from "../../models/enums";
 import { Home, Community, Search, Route, Settings } from "../../screens";
 
+const { Navigator, Screen } = createBottomTabNavigator();
+
 export default function SignedScreen() {
   const [notificationCounter, setNotificationCounter] =
     React.useState<number>(100);
-  const { Navigator, Screen } = createBottomTabNavigator();
+  
   const communityOnFocus = () => {
     setNotificationCounter(0);
   };
