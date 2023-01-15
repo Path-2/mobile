@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import FacebookIcon from "../../assets/icons/facebook.svg";
@@ -15,6 +8,7 @@ import Input from "../../components/Input";
 import { primary } from "../../configs/colors";
 import { useTheme } from "../../hooks/theme";
 import { ScreenEnum } from "../../models/enums";
+import { createUser } from "../../service/user";
 import * as Utils from "../../utils";
 import { Title } from "../SignIn/styles";
 
@@ -26,15 +20,13 @@ export default function SignUp({ navigation }: any) {
 
   const [isProcessing, setIsProcessing] = React.useState<boolean>(false);
   const [isValidPassword, setIsValidPassword] = React.useState<boolean>(false);
-  const [isValidIdCard, setIsValidIdCard] = React.useState<boolean>(false);
   const [isValidEmail, setIsValidEmail] = React.useState<boolean>(false);
   const [isValidPhone, setIsValidPhone] = React.useState<boolean>(false);
+  const [isDisabled, setIsDisabled] = React.useState<boolean>(false);
   const [isEqualsPassword, setIsEqualsPassword] =
     React.useState<boolean>(false);
 
   const [messageWarningPassword, setMessageWarningPassword] =
-    React.useState<string>("");
-  const [messageInvalidIdCard, setMessageInvalidIdCard] =
     React.useState<string>("");
   const [messageInvalidEmail, setMessageInvalidEmail] =
     React.useState<string>("");
@@ -44,9 +36,7 @@ export default function SignUp({ navigation }: any) {
     React.useState<string>("");
 
   const [fullName, setFullName] = React.useState<string>("");
-  const [idCard, setIdCard] = React.useState<string>("");
   const [email, setEmail] = React.useState<string>("");
-  const [phoneMasked, setPhoneMasked] = React.useState<string>("");
   const [phone, setPhone] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
   const [confirmPassword, setConfirmPassword] = React.useState<string>("");
@@ -54,7 +44,6 @@ export default function SignUp({ navigation }: any) {
   const { colors } = useTheme();
 
   const handleFullName = (text: string) => setFullName(Utils.capitalize(text));
-  const handleIdCard = (text: string) => setIdCard(text.toUpperCase());
   const handleEmail = (text: string) => {
     if (!text.includes("..")) setEmail(text.toLowerCase());
   };
@@ -62,7 +51,15 @@ export default function SignUp({ navigation }: any) {
   const handlePassword = (text: string) => setPassword(text);
   const handleConfirmPassword = (text: string) => setConfirmPassword(text);
 
-  const handleSignup = React.useCallback(() => setIsProcessing(true), []);
+  const handleSignup = React.useCallback(async () => {
+    setIsProcessing(true);
+    
+    const res = await createUser({name: fullName, email, phone, password})
+
+    console.log(res)
+
+    setIsProcessing(false)
+  }, []);
 
   React.useEffect(() => {
     if (!(confirmPassword && password)) {
@@ -119,19 +116,6 @@ export default function SignUp({ navigation }: any) {
   }, [password]);
 
   React.useEffect(() => {
-    if (!isValidIdCard) setMessageInvalidIdCard("bi inválido.");
-    else setMessageInvalidIdCard("");
-  }, [isValidIdCard]);
-
-  React.useEffect(() => {
-    if (idCard) setIsValidIdCard(Utils.validateIdCard(idCard));
-    else {
-      setIsValidIdCard(true);
-      setMessageInvalidIdCard("");
-    }
-  }, [idCard]);
-
-  React.useEffect(() => {
     if (phone) {
       setIsValidPhone(Utils.validatePhone(phone));
       //setPhoneMasked(Utils.mask(phone, "xxx-xxx-xxx"));
@@ -148,6 +132,16 @@ export default function SignUp({ navigation }: any) {
   React.useEffect(() => {
     if (isProcessing)
       setTimeout(() => navigation.navigate(ScreenEnum.Signed), 4000);
+  }, [isProcessing]);
+
+  React.useEffect(() => {
+    setIsDisabled(
+      !isEqualsPassword || !isValidEmail || !isValidPassword || !isValidPhone
+    );
+  }, [isEqualsPassword, isValidEmail, isValidPassword, isValidPhone]);
+
+  React.useEffect(() => {
+    setIsDisabled(isProcessing);
   }, [isProcessing]);
 
   return (
@@ -183,22 +177,6 @@ export default function SignUp({ navigation }: any) {
             value={fullName}
             style={{ color: colors.primary.txt }}
           />
-          <View>
-            <Input
-              icon={"idcard"}
-              type={"text"}
-              placeholder={"Bilhete de Identidade"}
-              onChange={handleIdCard}
-              value={idCard}
-              limit={14}
-              style={{ color: colors.primary.txt }}
-            />
-            {messageInvalidIdCard ? (
-              <Text style={{ color: "red" }}>{messageInvalidIdCard}</Text>
-            ) : (
-              <></>
-            )}
-          </View>
           <View>
             <Input
               type="email"
@@ -268,19 +246,19 @@ export default function SignUp({ navigation }: any) {
             disabled={
               !isEqualsPassword ||
               !isValidEmail ||
-              !isValidIdCard ||
               !isValidPassword ||
               !fullName
             }
-            style={{...styles.signupButton, backgroundColor: colors.primary.bgBt}}
+            style={{
+              ...styles.signupButton,
+              backgroundColor: colors.primary.bgBt,
+            }}
             onPress={handleSignup}
           >
             {isProcessing ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text style={{ color: colors.primary.txtBt }}>
-                Criar
-              </Text>
+              <Text style={{ color: colors.primary.txtBt }}>Criar</Text>
             )}
           </TouchableOpacity>
         </View>
@@ -323,5 +301,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginBottom: 20,
-  }
+  },
 });

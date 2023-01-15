@@ -21,3 +21,12 @@ export type Stop = {
   name: string;
   coordinates: { lat: number; lon: number };
 };
+
+export type User = {
+  id?: number
+  username?: string
+  name: string
+  email: string
+  phone: string
+  password?: string
+}

@@ -25,28 +25,7 @@ export default function Input({
   };
   return (
     <View style={styles.container}>
-      {icon.startsWith("ios") ? (
-        <Ionicons
-          size={14}
-          name={icon}
-          style={{ ...styles.icon, ...style }}
-          color={style?.color}
-        />
-      ) : icon === "idcard" ? (
-        <AntDesign
-          size={14}
-          name="idcard"
-          style={{ ...styles.icon, ...style }}
-          color={style?.color}
-        />
-      ) : (
-        <MaterialIcons
-          size={14}
-          name={icon}
-          style={{ ...styles.icon, ...style }}
-          color={style?.color}
-        />
-      )}
+      <InputIcon icon={icon} style={style}/>
       <TextInput
         style={{ ...styles.input, ...style }}
         keyboardType={getType(type)}
@@ -67,6 +46,31 @@ export default function Input({
     </View>
   );
 }
+
+const InputIcon = ({ icon, style }: any) => {
+  return icon.startsWith("ios") ? (
+    <Ionicons
+      size={14}
+      name={icon}
+      style={{ ...styles.icon, ...style }}
+      color={style?.color}
+    />
+  ) : icon === "idcard" ? (
+    <AntDesign
+      size={14}
+      name="idcard"
+      style={{ ...styles.icon, ...style }}
+      color={style?.color}
+    />
+  ) : (
+    <MaterialIcons
+      size={14}
+      name={icon}
+      style={{ ...styles.icon, ...style }}
+      color={style?.color}
+    />
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
