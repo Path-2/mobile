@@ -5,8 +5,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Rings } from "../../components";
 import { primary } from "../../configs/colors";
-import { ScreenEnum } from "../../models/enums";
 import { useTheme } from "../../hooks/theme";
+import { ScreenEnum } from "../../models/enums";
 
 export default function Opening({ navigation }: any) {
   const { colors } = useTheme();
@@ -42,7 +42,7 @@ export default function Opening({ navigation }: any) {
 
   return (
     <SafeAreaView
-      style={{ ...styles.container, backgroundColor: colors.background }}
+      style={{ ...styles.container, backgroundColor: colors.primary.bg }}
     >
       <Text style={styles.text}>Path2</Text>
       <Rings delay={500} />
