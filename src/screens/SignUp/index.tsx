@@ -1,5 +1,13 @@
+import { HttpStatusCode } from "axios";
 import React from "react";
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import FacebookIcon from "../../assets/icons/facebook.svg";
@@ -8,9 +16,11 @@ import Input from "../../components/Input";
 import { primary } from "../../configs/colors";
 import { useTheme } from "../../hooks/theme";
 import { ScreenEnum } from "../../models/enums";
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { createUser } from "../../service/user";
 import * as Utils from "../../utils";
 import { Title } from "../SignIn/styles";
+import { UserCreateResponse } from "../../models/types";
 
 export default function SignUp({ navigation }: any) {
   const signIn = React.useCallback(
@@ -42,6 +52,7 @@ export default function SignUp({ navigation }: any) {
   const [confirmPassword, setConfirmPassword] = React.useState<string>("");
 
   const { colors } = useTheme();
+  const { setItem } = useAsyncStorage("access_token");
 
   const handleFullName = (text: string) => setFullName(Utils.capitalize(text));
   const handleEmail = (text: string) => {
@@ -50,16 +61,37 @@ export default function SignUp({ navigation }: any) {
   const handlePhone = (text: string) => setPhone(text);
   const handlePassword = (text: string) => setPassword(text);
   const handleConfirmPassword = (text: string) => setConfirmPassword(text);
+  const clearForm = () => {
+    handleConfirmPassword('')
+    handleEmail('')
+    handleFullName('')
+    handlePassword('')
+    handlePhone('')
+  }
 
-  const handleSignup = React.useCallback(async () => {
+  const handleSignup = async () => {
     setIsProcessing(true);
-    
-    const res = await createUser({name: fullName, email, phone, password})
 
-    console.log(res)
+    try {
+      const res = (await createUser({
+        name: fullName,
+        email,
+        phone,
+        password,
+      })) as any as UserCreateResponse;
 
-    setIsProcessing(false)
-  }, []);
+      if (res.status === HttpStatusCode.Created) {
+        setItem(JSON.stringify({'access_token': res.headers.token}), (error) => {
+          if (error) console.error(error.message);
+        });
+        setTimeout(() => navigation.navigate(ScreenEnum.Signed), 4000);
+      }
+    } catch (err) {
+      console.error((err as Error).message);
+    }
+
+    setIsProcessing(false);
+  };
 
   React.useEffect(() => {
     if (!(confirmPassword && password)) {
@@ -118,7 +150,6 @@ export default function SignUp({ navigation }: any) {
   React.useEffect(() => {
     if (phone) {
       setIsValidPhone(Utils.validatePhone(phone));
-      //setPhoneMasked(Utils.mask(phone, "xxx-xxx-xxx"));
 
       if (!Utils.validatePhone(phone)) {
         setMessageInvalidPhone("Número inválido.");
@@ -130,18 +161,13 @@ export default function SignUp({ navigation }: any) {
   }, [phone]);
 
   React.useEffect(() => {
-    if (isProcessing)
-      setTimeout(() => navigation.navigate(ScreenEnum.Signed), 4000);
-  }, [isProcessing]);
-
-  React.useEffect(() => {
     setIsDisabled(
       !isEqualsPassword || !isValidEmail || !isValidPassword || !isValidPhone
     );
   }, [isEqualsPassword, isValidEmail, isValidPassword, isValidPhone]);
 
   React.useEffect(() => {
-    setIsDisabled(isProcessing);
+    setIsDisabled(true);
   }, [isProcessing]);
 
   return (

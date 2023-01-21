@@ -23,10 +23,16 @@ export type Stop = {
 };
 
 export type User = {
-  id?: number
-  username?: string
-  name: string
-  email: string
-  phone: string
-  password?: string
-}
+  id?: number;
+  username?: string;
+  name: string;
+  email: string;
+  phone: string;
+  password?: string;
+};
+
+export type UserCreateResponse = {
+  data?: any;
+  headers: { token: string };
+  status: number;
+};
