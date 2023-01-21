@@ -1,4 +1,4 @@
-import RNDateTimePicker from "@react-native-community/datetimepicker";
+import { HttpStatusCode } from "axios";
 import React from "react";
 import {
   ActivityIndicator,
@@ -14,26 +14,182 @@ import FacebookIcon from "../../assets/icons/facebook.svg";
 import GoogleIcon from "../../assets/icons/google.svg";
 import Input from "../../components/Input";
 import { primary } from "../../configs/colors";
+import { useTheme } from "../../hooks/theme";
 import { ScreenEnum } from "../../models/enums";
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
+import { createUser } from "../../service/user";
+import * as Utils from "../../utils";
 import { Title } from "../SignIn/styles";
+import { UserCreateResponse } from "../../models/types";
+import { Modal } from "../../components";
 
 export default function SignUp({ navigation }: any) {
-  const signin = React.useCallback(
+  const signIn = React.useCallback(
     () => navigation.navigate(ScreenEnum.SignIn),
     []
   );
-  const [editDate, setEditDate] = React.useState<boolean>(false);
+
   const [isProcessing, setIsProcessing] = React.useState<boolean>(false);
+  const [isValidPassword, setIsValidPassword] = React.useState<boolean>(false);
+  const [isValidEmail, setIsValidEmail] = React.useState<boolean>(false);
+  const [isValidPhone, setIsValidPhone] = React.useState<boolean>(false);
+  const [isDisabled, setIsDisabled] = React.useState<boolean>(false);
+  const [hasError, setHasError] = React.useState<boolean>(false);
+  const [isEqualsPassword, setIsEqualsPassword] =
+    React.useState<boolean>(false);
+
+  const [messageWarningPassword, setMessageWarningPassword] =
+    React.useState<string>("");
+  const [messageInvalidEmail, setMessageInvalidEmail] =
+    React.useState<string>("");
+  const [messageInvalidPhone, setMessageInvalidPhone] =
+    React.useState<string>("");
+  const [messageNotEqualsPassword, setMessageNotEqualsPassword] =
+    React.useState<string>("");
+
+  const [fullName, setFullName] = React.useState<string>("");
+  const [email, setEmail] = React.useState<string>("");
+  const [phone, setPhone] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
+  const [confirmPassword, setConfirmPassword] = React.useState<string>("");
+
+  const { colors } = useTheme();
+  const { setItem } = useAsyncStorage("access_token");
+
+  const handleFullName = (text: string) => setFullName(Utils.capitalize(text));
+  const handleEmail = (text: string) => {
+    if (!text.includes("..")) setEmail(text.toLowerCase());
+  };
+  const handlePhone = (text: string) => setPhone(text);
+  const handlePassword = (text: string) => setPassword(text);
+  const handleConfirmPassword = (text: string) => setConfirmPassword(text);
+  const clearForm = () => {
+    handleConfirmPassword("");
+    handleEmail("");
+    handleFullName("");
+    handlePassword("");
+    handlePhone("");
+  };
+
+  const handleSignup = async () => {
+    setIsProcessing(true);
+
+    try {
+      const res = (await createUser({
+        name: fullName,
+        email,
+        phone,
+        password,
+      })) as any as UserCreateResponse;
+
+      if (res.status === HttpStatusCode.Created) {
+        setItem(
+          JSON.stringify({ access_token: res.headers.token }),
+          (error) => {
+            if (error) console.error(error.message);
+          }
+        );
+        setTimeout(() => navigation.navigate(ScreenEnum.Signed), 2500);
+        clearForm()
+      }
+    } catch (err) {
+      console.error((err as Error).message);
+      setIsDisabled(false)
+      setHasError(true)
+      setTimeout(() => setHasError(false), 3000)
+    }
+
+    setIsProcessing(false);
+  };
+
+  React.useEffect(() => {
+    if (!(confirmPassword && password)) {
+      setMessageNotEqualsPassword("");
+      setIsEqualsPassword(false);
+    } else if (confirmPassword.length === password.length) {
+      setIsEqualsPassword(confirmPassword === password);
+      setMessageNotEqualsPassword(
+        confirmPassword === password ? "" : "Senhas diferentes."
+      );
+    } else {
+      setIsEqualsPassword(false);
+      setMessageNotEqualsPassword("Senhas diferentes.");
+    }
+  }, [confirmPassword]);
+
+  React.useEffect(() => {
+    if (!isValidEmail)
+      setMessageInvalidEmail("Por favor insira um email válido.");
+    else setMessageInvalidEmail("");
+  }, [isValidEmail]);
+
+  React.useEffect(() => {
+    if (email) setIsValidEmail(Utils.validateEmail(email));
+    else setIsValidEmail(true);
+  }, [email]);
+
+  React.useEffect(() => {
+    const warnings: string[] = [];
+
+    if (password) {
+      setIsValidPassword(Utils.validatePassword(password));
+
+      if (!Utils.hasNumeric(password)) warnings.push("um número");
+      if (!Utils.hasLowerCase(password)) warnings.push("um caracter minúsculo");
+      if (!Utils.hasUpperCase(password)) warnings.push("um caracter maiúsculo");
+      if (!Utils.hasEnoughLength(password, 8)) warnings.push("8 dígitos");
+
+      setMessageWarningPassword(warnings.join(", "));
+    } else setMessageWarningPassword("");
+
+    if (!(confirmPassword && password)) {
+      setMessageNotEqualsPassword("");
+      setIsEqualsPassword(false);
+    } else if (confirmPassword.length === password.length) {
+      setIsEqualsPassword(confirmPassword === password);
+      setMessageNotEqualsPassword(
+        confirmPassword === password ? "" : "Senhas diferentes."
+      );
+    } else {
+      setIsEqualsPassword(false);
+      setMessageNotEqualsPassword("Senhas diferentes.");
+    }
+  }, [password]);
+
+  React.useEffect(() => {
+    if (phone) {
+      setIsValidPhone(Utils.validatePhone(phone));
+
+      if (!Utils.validatePhone(phone)) {
+        setMessageInvalidPhone("Número inválido.");
+      } else setMessageInvalidPhone("");
+    } else {
+      setIsValidPhone(false);
+      setMessageInvalidPhone("");
+    }
+  }, [phone]);
+
+  React.useEffect(() => {
+    setIsDisabled(
+      !isEqualsPassword || !isValidEmail || !isValidPassword || !isValidPhone
+    );
+  }, [isEqualsPassword, isValidEmail, isValidPassword, isValidPhone]);
+
+  React.useEffect(() => {
+    setIsDisabled(true);
+  }, [isProcessing]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={{ ...styles.container, backgroundColor: colors.primary.bg }}
+    >
       <View>
         <Text style={{ fontSize: 90, textAlign: "center", color: primary }}>
           Path2
         </Text>
       </View>
       <View>
-        <Title>Criar Conta</Title>
+        <Title style={{ color: colors.primary.txt }}>Criar Conta</Title>
         <View style={styles.signupOptions}>
           <TouchableOpacity style={styles.signupOptionsButton}>
             <GoogleIcon height={30} width={30} />
@@ -43,76 +199,120 @@ export default function SignUp({ navigation }: any) {
           </TouchableOpacity>
         </View>
       </View>
-      <Text style={{ marginBottom: 5 }}>Ou, cria conta com...</Text>
+      <Text style={{ marginBottom: 5, color: colors.primary.txt }}>
+        Ou, cria conta com...
+      </Text>
       <ScrollView>
         <View>
           <Input
             icon={"ios-person-outline"}
             type={"text"}
             placeholder={"Nome completo"}
-            onChange={function (newValue: any): void {}}
+            onChange={handleFullName}
+            value={fullName}
+            style={{ color: colors.primary.txt }}
           />
-          <Input
-            icon={""}
-            type={"text"}
-            placeholder={"BI"}
-            onChange={function (newValue: any): void {}}
-          />
-          <Input
-            type="email"
-            icon="alternate-email"
-            placeholder="Email ID"
-            onChange={function (newValue: any): void {}}
-          />
-
-          <Input
-            type="text"
-            icon="ios-calendar-outline"
-            placeholder="dd/MM/yyyy"
-            disabled
-            option={{
-              action: () => {
-                setEditDate(true);
-              },
-              text: "",
+          <View>
+            <Input
+              type="email"
+              icon="alternate-email"
+              placeholder="Email ID"
+              onChange={handleEmail}
+              value={email}
+              style={{ color: colors.primary.txt }}
+            />
+            {messageInvalidEmail ? (
+              <Text style={{ color: "red" }}>{messageInvalidEmail}</Text>
+            ) : (
+              <></>
+            )}
+          </View>
+          <View>
+            <Input
+              type="tel"
+              icon="phone"
+              placeholder="(+244) xxx-xxx-xxx"
+              onChange={handlePhone}
+              value={phone}
+              limit={9}
+              style={{ color: colors.primary.txt }}
+            />
+            {messageInvalidPhone ? (
+              <Text style={{ color: "red" }}>{messageInvalidPhone}</Text>
+            ) : (
+              <></>
+            )}
+          </View>
+          <View>
+            <Input
+              type="password"
+              icon="ios-lock-closed-outline"
+              placeholder="Senha"
+              onChange={handlePassword}
+              value={password}
+              style={{ color: colors.primary.txt }}
+            />
+            {messageWarningPassword ? (
+              <Text style={{ color: "orange" }}>
+                Insira pelo menos{" " + messageWarningPassword}
+              </Text>
+            ) : (
+              <></>
+            )}
+          </View>
+          <View>
+            <Input
+              type="password"
+              icon="ios-lock-closed-outline"
+              placeholder="Confirme a senha"
+              onChange={handleConfirmPassword}
+              value={confirmPassword}
+              style={{ color: colors.primary.txt }}
+            />
+            {messageNotEqualsPassword ? (
+              <Text style={{ color: "red", marginBottom: 10 }}>
+                {messageNotEqualsPassword}
+              </Text>
+            ) : (
+              <></>
+            )}
+          </View>
+          <TouchableOpacity
+            disabled={
+              !isEqualsPassword ||
+              !isValidEmail ||
+              !isValidPassword ||
+              !fullName ||
+              isDisabled
+            }
+            style={{
+              ...styles.signupButton,
+              backgroundColor: colors.primary.bgBt,
             }}
-            onChange={function (newValue: any): void {}}
-          />
-          {editDate && <RNDateTimePicker value={new Date()} />}
-          <Input
-            type="password"
-            icon="ios-lock-closed-outline"
-            placeholder="Senha"
-            onChange={function (newValue: any): void {}}
-          />
-          <Input
-            type="password"
-            icon="ios-lock-closed-outline"
-            placeholder="Confirme a senha"
-            onChange={function (newValue: any): void {}}
-          />
-          <TouchableOpacity style={styles.signupButton}>
+            onPress={handleSignup}
+          >
             {isProcessing ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text style={styles.signupButtonText}>Criar</Text>
+              <Text style={{ color: colors.primary.txtBt }}>Criar</Text>
             )}
           </TouchableOpacity>
         </View>
         <View style={styles.text}>
-          <Text>Já tens uma conta?</Text>
-          <TouchableOpacity onPress={signin} style={{ marginLeft: 3 }}>
+          <Text style={{ color: colors.primary.txt }}>Já tens uma conta?</Text>
+          <TouchableOpacity onPress={signIn} style={{ marginLeft: 3 }}>
             <Text style={{ color: primary }}>Login</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
+      <Modal message={"Ocorreu algum ao tentar te registrar, tente novamente"} visible={hasError} />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    padding: 15,
     flexDirection: "column",
     justifyContent: "space-evenly",
     flex: 1,
@@ -122,8 +322,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
   },
   signupOptionsButton: {
-    borderColor: "#ccc",
-    borderWidth: 1,
     paddingHorizontal: 15,
     paddingVertical: 5,
     borderRadius: 15,
@@ -135,14 +333,10 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   signupButton: {
-    backgroundColor: primary,
     padding: 10,
     borderRadius: 10,
     flexDirection: "row",
     justifyContent: "center",
     marginBottom: 20,
-  },
-  signupButtonText: {
-    color: "#fff",
   },
 });

@@ -1,13 +1,14 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createStackNavigator } from "@react-navigation/stack";
+import React from "react";
+
 import { screenOptions } from "../../configs";
 import { ScreenEnum } from "../../models/enums";
 import ListAll from "./ListAll";
 import New from "./New";
 
-export default function Routes() {
+const { Navigator, Screen } = createStackNavigator();
 
-  const {Navigator, Screen} = createNativeStackNavigator();
-
+export default function Routes(): JSX.Element {
   return (
     <Navigator screenOptions={screenOptions}>
       <Screen name={ScreenEnum.RouteListAll} component={ListAll} />

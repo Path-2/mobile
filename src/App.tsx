@@ -1,17 +1,21 @@
 import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Opening } from "./screens";
-import { ScreenEnum } from "./models/enums";
-import { SignedScreen, UnSignedScreen } from "./components";
+import React from "react";
+
 import { screenOptions } from "./configs";
+import { ThemeProvider } from "./hooks/theme";
+import { ScreenEnum } from "./models/enums";
+import { Opening } from "./screens";
+import { SignedScreen, UnSignedScreen } from "./screens/wrappers";
+
+import "react-native-gesture-handler";
+
+const { Navigator, Screen } = createStackNavigator();
 
 export default function App() {
-  const {Navigator, Screen} = createNativeStackNavigator();
-
   return (
-    <SafeAreaProvider>
+    <ThemeProvider>
       <NavigationContainer>
         <Navigator screenOptions={screenOptions}>
           <Screen name={ScreenEnum.Opening} component={Opening} />
@@ -20,6 +24,6 @@ export default function App() {
         </Navigator>
       </NavigationContainer>
       <StatusBar style="auto" />
-    </SafeAreaProvider>
+    </ThemeProvider>
   );
 }

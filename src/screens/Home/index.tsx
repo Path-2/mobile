@@ -2,9 +2,11 @@ import React from "react";
 import { Text, StyleSheet } from "react-native";
 import MapView from "react-native-maps";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTheme } from "../../hooks/theme";
 
-export default function Home({route}: any) {
+export default function Home({ route }: any) {
   const [location, setLocation] = React.useState<any>(null);
+  const { colors } = useTheme();
 
   React.useEffect(() => {
     (async () => {
@@ -18,7 +20,9 @@ export default function Home({route}: any) {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={{ ...styles.container, backgroundColor: colors.primary.bg }}
+    >
       {/*Platform.OS === "web" ? (
         <></>
       ) : (
@@ -35,7 +39,7 @@ export default function Home({route}: any) {
           mapType="hybrid"
         />
         )*/}
-        <Text>{route.params?.name}</Text>
+      <Text style={{ color: colors.primary.txt }}>{route.params?.name}</Text>
     </SafeAreaView>
   );
 }

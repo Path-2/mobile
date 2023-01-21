@@ -1,6 +1,5 @@
-import SignedScreen from "./SignedScreen";
-import UnSignedScreen from "./UnSignedScreen";
 import Input from "./Input";
 import Rings from "./Rings";
+import { CustomModal } from "./modal";
 
-export { SignedScreen, UnSignedScreen, Input, Rings };
+export { Input, Rings, CustomModal as Modal };

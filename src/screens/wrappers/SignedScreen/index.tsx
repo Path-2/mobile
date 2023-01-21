@@ -1,14 +1,16 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
-import { screenOptions } from "../../configs";
-import { primary } from "../../configs/colors";
-import { ScreenEnum } from "../../models/enums";
-import { Home, Community, Search, Route, Settings } from "../../screens";
+import { screenOptions } from "../../../configs";
+import { primary } from "../../../configs/colors";
+import { ScreenEnum } from "../../../models/enums";
+import { Home, Community, Search, Route, Settings } from "../../";
+
+const { Navigator, Screen } = createBottomTabNavigator();
 
 export default function SignedScreen() {
   const [notificationCounter, setNotificationCounter] =
     React.useState<number>(100);
-  const { Navigator, Screen } = createBottomTabNavigator();
+  
   const communityOnFocus = () => {
     setNotificationCounter(0);
   };

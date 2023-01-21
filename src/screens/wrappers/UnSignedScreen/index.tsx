@@ -1,20 +1,22 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createStackNavigator } from "@react-navigation/stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { inactive, primary } from "../../configs/colors";
-import { ScreenEnum } from "../../models/enums";
-import { SignIn, SignUp, Forgot } from "../../screens";
+
+import { inactive, primary } from "../../../configs/colors";
+import { ScreenEnum } from "../../../models/enums";
+import { Forgot, SignIn, SignUp } from "../../";
+
+const { Screen, Navigator } = createStackNavigator();
 
 export default function UnSignedScreen() {
-  const Stack = createNativeStackNavigator();
   return (
-    <Stack.Navigator
+    <Navigator
       initialRouteName={ScreenEnum.SignIn}
       screenOptions={screenOptions}
     >
-      <Stack.Screen name={ScreenEnum.SignIn} component={SignIn} />
-      <Stack.Screen name={ScreenEnum.SignUp} component={SignUp} />
-      <Stack.Screen name={ScreenEnum.Forgot} component={Forgot} />
-    </Stack.Navigator>
+      <Screen name={ScreenEnum.SignIn} component={SignIn} />
+      <Screen name={ScreenEnum.SignUp} component={SignUp} />
+      <Screen name={ScreenEnum.Forgot} component={Forgot} />
+    </Navigator>
   );
 }
 
