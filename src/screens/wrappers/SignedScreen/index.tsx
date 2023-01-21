@@ -1,9 +1,9 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
-import { screenOptions } from "../../configs";
-import { primary } from "../../configs/colors";
-import { ScreenEnum } from "../../models/enums";
-import { Home, Community, Search, Route, Settings } from "../../screens";
+import { screenOptions } from "../../../configs";
+import { primary } from "../../../configs/colors";
+import { ScreenEnum } from "../../../models/enums";
+import { Home, Community, Search, Route, Settings } from "../../";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 

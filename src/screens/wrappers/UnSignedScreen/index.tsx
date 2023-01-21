@@ -1,9 +1,9 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-import { inactive, primary } from "../../configs/colors";
-import { ScreenEnum } from "../../models/enums";
-import { Forgot, SignIn, SignUp } from "../../screens";
+import { inactive, primary } from "../../../configs/colors";
+import { ScreenEnum } from "../../../models/enums";
+import { Forgot, SignIn, SignUp } from "../../";
 
 const { Screen, Navigator } = createStackNavigator();
 

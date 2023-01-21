@@ -45,7 +45,7 @@ export default function Opening({ navigation }: any) {
     >
       <Text style={styles.text}>Path2</Text>
       <Rings delay={500} />
-      <Modal message={message} visible={alert} />
+      <Modal message={message} visible={alert}/>
     </SafeAreaView>
   );
 }

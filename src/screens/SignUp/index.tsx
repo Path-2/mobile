@@ -21,6 +21,7 @@ import { createUser } from "../../service/user";
 import * as Utils from "../../utils";
 import { Title } from "../SignIn/styles";
 import { UserCreateResponse } from "../../models/types";
+import { Modal } from "../../components";
 
 export default function SignUp({ navigation }: any) {
   const signIn = React.useCallback(
@@ -33,6 +34,7 @@ export default function SignUp({ navigation }: any) {
   const [isValidEmail, setIsValidEmail] = React.useState<boolean>(false);
   const [isValidPhone, setIsValidPhone] = React.useState<boolean>(false);
   const [isDisabled, setIsDisabled] = React.useState<boolean>(false);
+  const [hasError, setHasError] = React.useState<boolean>(false);
   const [isEqualsPassword, setIsEqualsPassword] =
     React.useState<boolean>(false);
 
@@ -93,6 +95,8 @@ export default function SignUp({ navigation }: any) {
     } catch (err) {
       console.error((err as Error).message);
       setIsDisabled(false)
+      setHasError(true)
+      setTimeout(() => setHasError(false), 3000)
     }
 
     setIsProcessing(false);
@@ -301,6 +305,7 @@ export default function SignUp({ navigation }: any) {
           </TouchableOpacity>
         </View>
       </ScrollView>
+      <Modal message={"Ocorreu algum ao tentar te registrar, tente novamente"} visible={hasError} />
     </SafeAreaView>
   );
 }
