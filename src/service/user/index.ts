@@ -8,6 +8,5 @@ const baseURL = HOST + USER_URL;
 const userRequest = axios.create({ timeout: 18000 });
 
 export async function createUser(user: User) {
-  console.log(user)
   return await userRequest.post(baseURL, user);
 }

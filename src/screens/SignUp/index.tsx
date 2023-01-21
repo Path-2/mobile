@@ -62,12 +62,12 @@ export default function SignUp({ navigation }: any) {
   const handlePassword = (text: string) => setPassword(text);
   const handleConfirmPassword = (text: string) => setConfirmPassword(text);
   const clearForm = () => {
-    handleConfirmPassword('')
-    handleEmail('')
-    handleFullName('')
-    handlePassword('')
-    handlePhone('')
-  }
+    handleConfirmPassword("");
+    handleEmail("");
+    handleFullName("");
+    handlePassword("");
+    handlePhone("");
+  };
 
   const handleSignup = async () => {
     setIsProcessing(true);
@@ -81,13 +81,18 @@ export default function SignUp({ navigation }: any) {
       })) as any as UserCreateResponse;
 
       if (res.status === HttpStatusCode.Created) {
-        setItem(JSON.stringify({'access_token': res.headers.token}), (error) => {
-          if (error) console.error(error.message);
-        });
-        setTimeout(() => navigation.navigate(ScreenEnum.Signed), 4000);
+        setItem(
+          JSON.stringify({ access_token: res.headers.token }),
+          (error) => {
+            if (error) console.error(error.message);
+          }
+        );
+        setTimeout(() => navigation.navigate(ScreenEnum.Signed), 2500);
+        clearForm()
       }
     } catch (err) {
       console.error((err as Error).message);
+      setIsDisabled(false)
     }
 
     setIsProcessing(false);
@@ -273,7 +278,8 @@ export default function SignUp({ navigation }: any) {
               !isEqualsPassword ||
               !isValidEmail ||
               !isValidPassword ||
-              !fullName
+              !fullName ||
+              isDisabled
             }
             style={{
               ...styles.signupButton,
