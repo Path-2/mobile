@@ -3,12 +3,11 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 
-import SignedScreen from "./components/SignedScreen";
-import UnSignedScreen from "./components/UnSignedScreen";
 import { screenOptions } from "./configs";
 import { ThemeProvider } from "./hooks/theme";
 import { ScreenEnum } from "./models/enums";
 import { Opening } from "./screens";
+import { SignedScreen, UnSignedScreen } from "./screens/wrappers";
 
 import "react-native-gesture-handler";
 

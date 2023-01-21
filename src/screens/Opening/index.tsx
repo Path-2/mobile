@@ -1,16 +1,15 @@
 import * as Network from "expo-network";
 import React from "react";
-import { BackHandler, Modal, StyleSheet, Text, View } from "react-native";
+import { BackHandler, StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Rings } from "../../components";
+import { Rings, Modal } from "../../components";
 import { primary } from "../../configs/colors";
 import { useTheme } from "../../hooks/theme";
 import { ScreenEnum } from "../../models/enums";
 
 export default function Opening({ navigation }: any) {
   const { colors } = useTheme();
-  const [forward, setForward] = React.useState<boolean>(false);
   const [message, setMessage] = React.useState<string>("");
   const [alert, setAlert] = React.useState<boolean>(false);
 
@@ -46,21 +45,7 @@ export default function Opening({ navigation }: any) {
     >
       <Text style={styles.text}>Path2</Text>
       <Rings delay={500} />
-      {
-        <Modal animationType="slide" transparent={true} visible={alert}>
-          <View
-            style={{
-              position: "absolute",
-              bottom: 50,
-              width: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Text style={{ color: "#fff" }}>{message}</Text>
-          </View>
-        </Modal>
-      }
+      <Modal message={message} visible={alert} />
     </SafeAreaView>
   );
 }
