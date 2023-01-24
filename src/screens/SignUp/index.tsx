@@ -11,7 +11,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 
-import GoogleIcon from "../../assets/icons/google.svg";
+
 import Input from "../../components/Input";
 import { primary } from "../../configs/colors";
 import { useTheme } from "../../hooks/theme";
@@ -22,6 +22,8 @@ import * as Utils from "../../utils";
 import { Title } from "../SignIn/styles";
 import { UserCreateResponse } from "../../models/types";
 import { Modal } from "../../components";
+import GoogleButton from "../../components/GoogleButton";
+import FacebookButton from "../../components/FacebookButton";
 
 export default function SignUp({ navigation }: any) {
   const signIn = React.useCallback(
@@ -191,9 +193,8 @@ export default function SignUp({ navigation }: any) {
       <View>
         <Title style={{ color: colors.primary.txt }}>Criar Conta</Title>
         <View style={styles.signupOptions}>
-          <TouchableOpacity style={styles.signupOptionsButton}>
-            <GoogleIcon height={30} width={30} />
-          </TouchableOpacity>
+          <GoogleButton />
+          <FacebookButton />
           
         </View>
       </View>
