@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import FacebookIcon from "../../assets/icons/facebook.svg";
+
 import GoogleIcon from "../../assets/icons/google.svg";
 import Input from "../../components/Input";
 import { primary } from "../../configs/colors";
@@ -194,9 +194,7 @@ export default function SignUp({ navigation }: any) {
           <TouchableOpacity style={styles.signupOptionsButton}>
             <GoogleIcon height={30} width={30} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.signupOptionsButton}>
-            <FacebookIcon height={30} width={30} />
-          </TouchableOpacity>
+          
         </View>
       </View>
       <Text style={{ marginBottom: 5, color: colors.primary.txt }}>
