@@ -67,7 +67,7 @@ export function validateEmail(email: string): boolean {
 }
 
 export function capitalize(text: string): string {
-  return text.endsWith(" ")
+  return text.endsWith(" ") || text === ""
     ? text
     : text
         .split(" ")

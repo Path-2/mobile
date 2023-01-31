@@ -20,7 +20,7 @@ import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { createUser } from "../../service/user";
 import * as Utils from "../../utils";
 import { Title } from "../SignIn/styles";
-import { UserCreateResponse } from "../../models/types";
+import { FacebookUserData, UserCreateResponse } from "../../models/types";
 import { Modal } from "../../components";
 import GoogleButton from "../../components/GoogleButton";
 import FacebookButton from "../../components/FacebookButton";
@@ -85,6 +85,7 @@ export default function SignUp({ navigation }: any) {
       })) as any as UserCreateResponse;
 
       if (res.status === HttpStatusCode.Created) {
+        console.log(res)
         setItem(
           JSON.stringify({ access_token: res.headers.token }),
           (error) => {
@@ -194,7 +195,11 @@ export default function SignUp({ navigation }: any) {
         <Title style={{ color: colors.primary.txt }}>Criar Conta</Title>
         <View style={styles.signupOptions}>
           <GoogleButton />
-          <FacebookButton />
+          <FacebookButton onSuccess={function (data: FacebookUserData): void {
+            throw new Error("Function not implemented.");
+          } } onFailure={function (message: string): void {
+            throw new Error("Function not implemented.");
+          } } />
           
         </View>
       </View>

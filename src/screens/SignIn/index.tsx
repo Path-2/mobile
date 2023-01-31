@@ -8,29 +8,52 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import FacebookIcon from "../../assets/icons/facebook.svg";
-import GoogleIcon from "../../assets/icons/google.svg";
 import Input from "../../components/Input";
 import { primary } from "../../configs/colors";
 import { ScreenEnum } from "../../models/enums";
 import { useTheme } from "../../hooks/theme";
 import { Title } from "./styles";
+import GoogleButton from "../../components/GoogleButton";
+import FacebookButton from "../../components/FacebookButton";
+import { FacebookUserData, GoogleUserData } from "../../models/types";
+import { login } from "../../service/user";
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
 export default function SignIn({ navigation }: any) {
   const [isProcessing, setIsProcessing] = React.useState<boolean>(false);
+  const [username, setUsername] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
   const signup = React.useCallback(
     () => navigation.navigate(ScreenEnum.SignUp),
     []
   );
 
   const { colors } = useTheme();
+  const { setItem } = useAsyncStorage("");
 
-  const login = React.useCallback(() => setIsProcessing(true), []);
+  const handleLoginWithEmail = React.useCallback(async () => {
+    setIsProcessing(true);
 
-  React.useEffect(() => {
-    if (isProcessing)
-      setTimeout(() => navigation.navigate(ScreenEnum.Signed), 4000);
-  }, [isProcessing]);
+    const response = await login({ username, password });
+
+    if (!response) {
+    }
+
+    setItem(JSON.stringify(response));
+
+    navigation.navigate(ScreenEnum.Signed);
+
+    setIsProcessing(false);
+  }, []);
+
+  const handleUsername = (val: string) => setUsername(val);
+  const handlePassword = (val: string) => setPassword(val);
+  const handleLoginWithFacebook = (user: FacebookUserData) => {
+    setIsProcessing(true);
+    setUsername(user.id);
+    setPassword("12345");
+  };
+  const handleLoginWithGoogle = (user: GoogleUserData) => {};
 
   return (
     <SafeAreaView
@@ -46,9 +69,10 @@ export default function SignIn({ navigation }: any) {
         <Input
           type="email"
           icon="alternate-email"
-          placeholder="Email ID"
-          onChange={function (newValue: any): void {}}
+          placeholder="Email ID or username"
+          onChange={handleUsername}
           style={{ color: colors.primary.txt }}
+          value={username}
         />
         <Input
           type="password"
@@ -63,13 +87,18 @@ export default function SignIn({ navigation }: any) {
               navigation.navigate(ScreenEnum.Forgot);
             },
           }}
-          onChange={function (newValue: any): void {}}
+          onChange={handlePassword}
+          value={password}
         />
-        <TouchableOpacity style={styles.loginButton} onPress={login}>
+        <TouchableOpacity
+          style={styles.loginButton}
+          onPress={handleLoginWithEmail}
+          disabled={!username || !password}
+        >
           {isProcessing ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={{color: colors.primary.txtBt}}>Entrar</Text>
+            <Text style={{ color: colors.primary.txtBt }}>Entrar</Text>
           )}
         </TouchableOpacity>
       </View>
@@ -77,12 +106,16 @@ export default function SignIn({ navigation }: any) {
         <Text style={{ color: colors.primary.txt }}>Ou, entrar com</Text>
       </View>
       <View style={styles.loginOptions}>
-        <TouchableOpacity style={styles.loginOptionsButton}>
-          <GoogleIcon height={30} width={30} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.loginOptionsButton}>
-          <FacebookIcon height={30} width={30} />
-        </TouchableOpacity>
+        <GoogleButton
+          onFailure={(message: any) => console.error(message)}
+          onSuccess={(user: any) => {
+            setUsername(user.name);
+          }}
+        />
+        <FacebookButton
+          onFailure={(message: any) => console.error(message)}
+          onSuccess={handleLoginWithFacebook}
+        />
       </View>
       <View style={styles.text}>
         <Text style={{ color: colors.primary.txt }}>Novo no PATH2?</Text>
@@ -123,5 +156,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginBottom: 20,
-  }
+  },
 });
