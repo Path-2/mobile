@@ -43,7 +43,7 @@ export type FacebookUserData = {
   name: string;
   profile_picture: string | undefined;
   phone: string | undefined;
-  email:  string | undefined;
+  email: string | undefined;
   id: string;
 };
 
@@ -53,25 +53,35 @@ export type GoogleUserData = {
   name: string;
   profile_picture: string | undefined;
   phone: string | undefined;
-  email:  string | undefined;
+  email: string | undefined;
   id: string;
-}
+};
 
 export type LoginData = {
   username?: string;
   password?: string;
-}
+};
 
 export type UserToken = {
-  jwt: string
-}
+  jwt: string;
+};
 
 export type SocialAuth = {
-  token: string | undefined
-  url?: string
-}
+  token: string | undefined;
+  url?: string;
+};
 
 export type SocialButtonProps = {
-  onSuccess: (authData: SocialAuth | undefined) => void 
-  onFailure?: (failData: any | undefined) => void
+  onSuccess: (authData: SocialAuth | undefined) => Promise<void>;
+  onFailure?: (failData: any | undefined) => Promise<void>;
+};
+
+export type UserSocial = {
+  token: string;
+  type: UserSource;
+};
+
+export enum UserSource {
+  FACEBOOK = "FACEBOOK",
+  GOOGLE = "GOOGLE",
 }

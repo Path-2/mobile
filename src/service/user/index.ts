@@ -1,4 +1,4 @@
-import { SocialAuth } from "./../../models/types";
+import { SocialAuth, UserSocial } from "./../../models/types";
 import axios, { HttpStatusCode } from "axios";
 
 import { LoginData, User, UserToken } from "../../models/types";
@@ -7,7 +7,6 @@ const HOST: string = process.env.API_HOST || "http://localhost:8080/api/v1/";
 const FACEBOOK_HOST = "https://graph.facebook.com/me";
 const USER_URL: string = "users";
 const PATH2_LOGIN_URL: string = "auth/login";
-const baseURL = HOST + USER_URL;
 
 const userRequest = axios.create({ timeout: 18000 });
 const facebookRequest = axios.create({ timeout: 18000 });
@@ -24,7 +23,7 @@ const googleRequest = axios.create({
 });
 
 export async function createUser(user: User) {
-  return await userRequest.post(baseURL + "/signup", user);
+  return await userRequest.post(HOST + USER_URL + "/signup", user);
 }
 
 export async function getUserDataFromFacebook(accessToken: string) {
@@ -71,7 +70,6 @@ export async function login(loginData: LoginData): Promise<UserToken | null> {
 export async function googleLogin(
   googleData: SocialAuth
 ): Promise<UserToken | null> {
-  console.log(googleData);
   let token: UserToken;
   try {
     const { data, status } = await axios.get(HOST + PATH2_LOGIN_URL, {
@@ -90,7 +88,6 @@ export async function googleLogin(
 }
 
 export async function fbLogin(fbData: SocialAuth): Promise<UserToken | null> {
-  console.log(fbData);
   let token: UserToken;
   try {
     const { data, status } = await axios.get(HOST + PATH2_LOGIN_URL, {
@@ -107,4 +104,24 @@ export async function fbLogin(fbData: SocialAuth): Promise<UserToken | null> {
   }
 
   return token;
+}
+
+export async function createUserWithSocial(
+  user: UserSocial
+): Promise<UserToken | null> {
+  console.log(user)
+
+  try {
+    const { status, headers } = await userRequest.post(
+      HOST + USER_URL + "/signup/social",
+      user
+    );
+
+    if (status !== HttpStatusCode.Created) return null;
+
+    return { jwt: (headers as any).token }
+  } catch (error: any) {
+    return null;
+  }
+
 }

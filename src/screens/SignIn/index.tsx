@@ -51,13 +51,14 @@ export default function SignIn({ navigation }: any) {
 
   const handlePassword = (val: string) => setPassword(val);
 
-  const handleLoginWithFacebook = (authData: SocialAuth | undefined) => {
+  const handleLoginWithFacebook = async (authData: SocialAuth | undefined) => {
     if (!authData) {
       setIsProcessing(false);
       return;
     }
 
-    fbLogin(authData).then((token) => {
+    const token = await fbLogin(authData)
+
       if (!token || !token.jwt) {
         setIsProcessing(false);
         return;
@@ -68,15 +69,16 @@ export default function SignIn({ navigation }: any) {
       navigation.navigate(ScreenEnum.Signed);
 
       setIsProcessing(false);
-    });
   };
-  const handleLoginWithGoogle = (authData: SocialAuth | undefined) => {
+
+  const handleLoginWithGoogle = async (authData: SocialAuth | undefined) => {
     if (!authData) {
       setIsProcessing(false);
       return;
     }
 
-    googleLogin(authData).then((token) => {
+    const token = await googleLogin(authData)
+
       if (!token || !token.jwt) {
         setIsProcessing(false);
         return;
@@ -87,10 +89,8 @@ export default function SignIn({ navigation }: any) {
       navigation.navigate(ScreenEnum.Signed);
 
       setIsProcessing(false);
-    });
-  };
 
-  const handleFailureLoginWithGoogle = () => {};
+  };
 
   return (
     <SafeAreaView
@@ -143,14 +143,8 @@ export default function SignIn({ navigation }: any) {
         <Text style={{ color: colors.primary.txt }}>Ou, entrar com</Text>
       </View>
       <View style={styles.loginOptions}>
-        <GoogleButton
-          onFailure={handleFailureLoginWithGoogle}
-          onSuccess={handleLoginWithGoogle}
-        />
-        <FacebookButton
-          onFailure={(message: any) => console.error(message)}
-          onSuccess={handleLoginWithFacebook}
-        />
+        <GoogleButton onSuccess={handleLoginWithGoogle} />
+        <FacebookButton onSuccess={handleLoginWithFacebook} />
       </View>
       <View style={styles.text}>
         <Text style={{ color: colors.primary.txt }}>Novo no PATH2?</Text>

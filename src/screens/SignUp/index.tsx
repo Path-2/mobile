@@ -10,20 +10,24 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-
-
 import Input from "../../components/Input";
 import { primary } from "../../configs/colors";
 import { useTheme } from "../../hooks/theme";
 import { ScreenEnum } from "../../models/enums";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
-import { createUser } from "../../service/user";
+import { createUser, createUserWithSocial } from "../../service/user";
 import * as Utils from "../../utils";
 import { Title } from "../SignIn/styles";
-import { FacebookUserData, SocialAuth, UserCreateResponse } from "../../models/types";
+import {
+  FacebookUserData,
+  SocialAuth,
+  UserCreateResponse,
+  UserSource,
+} from "../../models/types";
 import { Modal } from "../../components";
 import GoogleButton from "../../components/GoogleButton";
 import FacebookButton from "../../components/FacebookButton";
+import { setToken } from "../../utils/auth";
 
 export default function SignUp({ navigation }: any) {
   const signIn = React.useCallback(
@@ -85,7 +89,7 @@ export default function SignUp({ navigation }: any) {
       })) as any as UserCreateResponse;
 
       if (res.status === HttpStatusCode.Created) {
-        console.log(res)
+        console.log(res);
         setItem(
           JSON.stringify({ access_token: res.headers.token }),
           (error) => {
@@ -93,14 +97,60 @@ export default function SignUp({ navigation }: any) {
           }
         );
         setTimeout(() => navigation.navigate(ScreenEnum.Signed), 2500);
-        clearForm()
+        clearForm();
       }
     } catch (err) {
       console.error((err as Error).message);
-      setIsDisabled(false)
-      setHasError(true)
-      setTimeout(() => setHasError(false), 3000)
+      setIsDisabled(false);
+      setHasError(true);
+      setTimeout(() => setHasError(false), 3000);
     }
+
+    setIsProcessing(false);
+  };
+
+  const handleSignupWithGoogle = async (data: SocialAuth | undefined) => {
+    if (!data) {
+      setIsProcessing(false);
+      return;
+    }
+
+    const token = await createUserWithSocial({
+      token: data.token!,
+      type: UserSource.GOOGLE,
+    });
+
+    if (!token || !token.jwt) {
+      setIsProcessing(false);
+      return;
+    }
+
+    setToken(token);
+
+    navigation.navigate(ScreenEnum.Signed);
+
+    setIsProcessing(false);
+  };
+
+  const handleSignupWithFacebook = async (data: SocialAuth | undefined) => {
+    if (!data) {
+      setIsProcessing(false);
+      return;
+    }
+
+    const token = await createUserWithSocial({
+      token: data.token!,
+      type: UserSource.FACEBOOK,
+    });
+
+    if (!token || !token.jwt) {
+      setIsProcessing(false);
+      return;
+    }
+
+    setToken(token);
+
+    navigation.navigate(ScreenEnum.Signed);
 
     setIsProcessing(false);
   };
@@ -194,13 +244,8 @@ export default function SignUp({ navigation }: any) {
       <View>
         <Title style={{ color: colors.primary.txt }}>Criar Conta</Title>
         <View style={styles.signupOptions}>
-          <GoogleButton onSuccess={function (authData: SocialAuth | undefined): void {
-            throw new Error("Function not implemented.");
-          } } />
-          <FacebookButton onSuccess={function (authData: SocialAuth | undefined): void {
-            throw new Error("Function not implemented.");
-          } } />
-          
+          <GoogleButton onSuccess={handleSignupWithGoogle} />
+          <FacebookButton onSuccess={handleSignupWithFacebook} />
         </View>
       </View>
       <Text style={{ marginBottom: 5, color: colors.primary.txt }}>
@@ -309,7 +354,10 @@ export default function SignUp({ navigation }: any) {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <Modal message={"Ocorreu algum ao tentar te registrar, tente novamente"} visible={hasError} />
+      <Modal
+        message={"Ocorreu algum ao tentar te registrar, tente novamente"}
+        visible={hasError}
+      />
     </SafeAreaView>
   );
 }
