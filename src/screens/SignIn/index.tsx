@@ -15,8 +15,8 @@ import Input from "../../components/Input";
 import { primary } from "../../configs/colors";
 import { useTheme } from "../../hooks/theme";
 import { ScreenEnum } from "../../models/enums";
-import { FacebookUserData } from "../../models/types";
-import { googleLogin, login } from "../../service/user";
+import { FacebookUserData, SocialAuth } from "../../models/types";
+import { fbLogin, googleLogin, login } from "../../service/user";
 import { Title } from "./styles";
 
 export default function SignIn({ navigation }: any) {
@@ -54,12 +54,28 @@ export default function SignIn({ navigation }: any) {
 
   const handlePassword = (val: string) => setPassword(val);
 
-  const handleLoginWithFacebook = (user: FacebookUserData) => {
-    setIsProcessing(true);
-    setUsername(user.id);
-    setPassword("12345");
+  const handleLoginWithFacebook = (authData: SocialAuth | undefined) => {
+    if (authData) {
+      setIsProcessing(false);
+      return;
+    }
+
+    fbLogin(authData!).then((token) => {
+      if (!token || !token.jwt) {
+        setIsProcessing(false);
+        return;
+      }
+
+      setItem(JSON.stringify(token), (error) => {
+        console.error(error?.message);
+      });
+
+      navigation.navigate(ScreenEnum.Signed);
+
+      setIsProcessing(false);
+    });
   };
-  const handleLoginWithGoogle = (authData: GoogleAuth | undefined) => {
+  const handleLoginWithGoogle = (authData: SocialAuth | undefined) => {
     if (authData) {
       setIsProcessing(false);
       return;
