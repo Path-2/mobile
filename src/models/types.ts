@@ -36,3 +36,52 @@ export type UserCreateResponse = {
   headers: { token: string };
   status: number;
 };
+
+export type FacebookUserData = {
+  first_name: string;
+  last_name: string;
+  name: string;
+  profile_picture: string | undefined;
+  phone: string | undefined;
+  email: string | undefined;
+  id: string;
+};
+
+export type GoogleUserData = {
+  first_name: string;
+  last_name: string;
+  name: string;
+  profile_picture: string | undefined;
+  phone: string | undefined;
+  email: string | undefined;
+  id: string;
+};
+
+export type LoginData = {
+  username?: string;
+  password?: string;
+};
+
+export type UserToken = {
+  jwt: string;
+};
+
+export type SocialAuth = {
+  token: string | undefined;
+  url?: string;
+};
+
+export type SocialButtonProps = {
+  onSuccess: (authData: SocialAuth | undefined) => Promise<void>;
+  onFailure?: (failData: any | undefined) => Promise<void>;
+};
+
+export type UserSocial = {
+  token: string;
+  type: UserSource;
+};
+
+export enum UserSource {
+  FACEBOOK = "FACEBOOK",
+  GOOGLE = "GOOGLE",
+}

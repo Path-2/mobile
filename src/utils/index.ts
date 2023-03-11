@@ -67,7 +67,7 @@ export function validateEmail(email: string): boolean {
 }
 
 export function capitalize(text: string): string {
-  return text.endsWith(" ")
+  return text.endsWith(" ") || text === ""
     ? text
     : text
         .split(" ")
@@ -76,7 +76,7 @@ export function capitalize(text: string): string {
 }
 
 export function validatePhone(phone: string): boolean {
-  return /[9][1-9][0-9]{7}/.test(phone);
+  return /9[1-9]\d{7}/.test(phone);
 }
 
 export function mask(value: string, mask: string): string {
@@ -99,8 +99,4 @@ export function mask(value: string, mask: string): string {
 
 function symbols(text: string): Array<string> {
   return text.split(/[A-Za-z0-9]/).filter((s) => s !== "");
-}
-
-function separateBySymbol(text: string): Array<string> {
-  return text.split(/[*/-\\ ,.<>|!"#$%&/()=?»«+*@]/).filter((s) => s !== "");
 }
