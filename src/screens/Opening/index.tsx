@@ -7,6 +7,7 @@ import { Rings, Modal } from "../../components";
 import { primary } from "../../configs/colors";
 import { useTheme } from "../../hooks/theme";
 import { ScreenEnum } from "../../models/enums";
+import { isAuthenticated } from "../../utils/auth";
 
 export default function Opening({ navigation }: any) {
   const { colors } = useTheme();
@@ -16,20 +17,30 @@ export default function Opening({ navigation }: any) {
   React.useEffect(() => {
     Network.getNetworkStateAsync().then((state) => {
       if (state.isConnected)
-        setTimeout(() => {
-          setAlert(false);
-          navigation.navigate(ScreenEnum.UnSigned);
-        }, 5000);
+        isAuthenticated().then((value) => {
+          setTimeout(() => {
+            setAlert(false);
+            const screen = value ? ScreenEnum.Signed : ScreenEnum.UnSigned;
+
+            navigation.navigate(screen);
+          }, 5000);
+        });
       else {
         setTimeout(() => {
           setMessage(
             "Pareces estar sem internet, alguns recursos estarão limitados..."
           );
+
           setAlert(true);
-          setTimeout(() => {
-            setAlert(false);
-            navigation.navigate(ScreenEnum.UnSigned);
-          }, 5000);
+
+          isAuthenticated().then((value) => {
+            setTimeout(() => {
+              setAlert(false);
+              const screen = value ? ScreenEnum.Signed : ScreenEnum.UnSigned;
+
+              navigation.navigate(screen);
+            }, 5000);
+          });
         }, 5000);
 
         setTimeout(() => {
@@ -45,7 +56,7 @@ export default function Opening({ navigation }: any) {
     >
       <Text style={styles.text}>Path2</Text>
       <Rings delay={500} />
-      <Modal message={message} visible={alert}/>
+      <Modal message={message} visible={alert} />
     </SafeAreaView>
   );
 }

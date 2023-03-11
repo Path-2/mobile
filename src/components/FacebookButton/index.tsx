@@ -20,14 +20,15 @@ export default function FacebookButton({
 
   React.useEffect(() => {
     if (response?.type === "success") {
-      const { authentication } = response;
+      const { authentication, error } = response;
 
+      if (error) {
+        if (onFailure) onFailure(error);
+        return;
+      }
       onSuccess({
         token: authentication?.accessToken,
       });
-    } else {
-      const { error } = response as any;
-      if (onFailure) onFailure(error);
     }
   }, [response]);
 

@@ -1,4 +1,3 @@
-import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import React from "react";
 import {
   ActivityIndicator,
@@ -15,7 +14,8 @@ import Input from "../../components/Input";
 import { primary } from "../../configs/colors";
 import { useTheme } from "../../hooks/theme";
 import { ScreenEnum } from "../../models/enums";
-import { FacebookUserData, SocialAuth } from "../../models/types";
+import { SocialAuth } from "../../models/types";
+import { setToken } from "../../utils/auth";
 import { fbLogin, googleLogin, login } from "../../service/user";
 import { Title } from "./styles";
 
@@ -29,7 +29,6 @@ export default function SignIn({ navigation }: any) {
   );
 
   const { colors } = useTheme();
-  const { setItem } = useAsyncStorage("");
 
   const handleLoginWithEmail = React.useCallback(async () => {
     setIsProcessing(true);
@@ -41,9 +40,7 @@ export default function SignIn({ navigation }: any) {
       return;
     }
 
-    setItem(JSON.stringify(response), (error) => {
-      console.error(error?.message);
-    });
+    setToken(response);
 
     navigation.navigate(ScreenEnum.Signed);
 
@@ -55,20 +52,18 @@ export default function SignIn({ navigation }: any) {
   const handlePassword = (val: string) => setPassword(val);
 
   const handleLoginWithFacebook = (authData: SocialAuth | undefined) => {
-    if (authData) {
+    if (!authData) {
       setIsProcessing(false);
       return;
     }
 
-    fbLogin(authData!).then((token) => {
+    fbLogin(authData).then((token) => {
       if (!token || !token.jwt) {
         setIsProcessing(false);
         return;
       }
 
-      setItem(JSON.stringify(token), (error) => {
-        console.error(error?.message);
-      });
+      setToken(token);
 
       navigation.navigate(ScreenEnum.Signed);
 
@@ -76,20 +71,18 @@ export default function SignIn({ navigation }: any) {
     });
   };
   const handleLoginWithGoogle = (authData: SocialAuth | undefined) => {
-    if (authData) {
+    if (!authData) {
       setIsProcessing(false);
       return;
     }
 
-    googleLogin(authData!).then((token) => {
+    googleLogin(authData).then((token) => {
       if (!token || !token.jwt) {
         setIsProcessing(false);
         return;
       }
 
-      setItem(JSON.stringify(token), (error) => {
-        console.error(error?.message);
-      });
+      setToken(token);
 
       navigation.navigate(ScreenEnum.Signed);
 

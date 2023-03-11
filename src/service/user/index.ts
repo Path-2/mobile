@@ -1,5 +1,5 @@
 import { SocialAuth } from "./../../models/types";
-import axios from "axios";
+import axios, { HttpStatusCode } from "axios";
 
 import { LoginData, User, UserToken } from "../../models/types";
 
@@ -71,13 +71,15 @@ export async function login(loginData: LoginData): Promise<UserToken | null> {
 export async function googleLogin(
   googleData: SocialAuth
 ): Promise<UserToken | null> {
+  console.log(googleData);
   let token: UserToken;
   try {
-    const { data } = await axios.get(HOST + PATH2_LOGIN_URL, {
+    const { data, status } = await axios.get(HOST + PATH2_LOGIN_URL, {
       headers: {
         google_token: googleData.token,
       },
     });
+    if (status !== HttpStatusCode.Ok) return null;
 
     token = data as UserToken;
   } catch (error: any) {
@@ -87,16 +89,17 @@ export async function googleLogin(
   return token;
 }
 
-export async function fbLogin(
-  fbData: SocialAuth
-): Promise<UserToken | null> {
+export async function fbLogin(fbData: SocialAuth): Promise<UserToken | null> {
+  console.log(fbData);
   let token: UserToken;
   try {
-    const { data } = await axios.get(HOST + PATH2_LOGIN_URL, {
+    const { data, status } = await axios.get(HOST + PATH2_LOGIN_URL, {
       headers: {
         facebook_token: fbData.token,
       },
     });
+
+    if (status !== HttpStatusCode.Ok) return null;
 
     token = data as UserToken;
   } catch (error: any) {
