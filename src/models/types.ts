@@ -58,10 +58,20 @@ export type GoogleUserData = {
 }
 
 export type LoginData = {
-  username: string;
-  password: string;
+  username?: string;
+  password?: string;
 }
 
 export type UserToken = {
-  
+  jwt: string
+}
+
+export type SocialAuth = {
+  token: string | undefined
+  url?: string
+}
+
+export type SocialButtonProps = {
+  onSuccess: (authData: SocialAuth | undefined) => void 
+  onFailure?: (failData: any | undefined) => void
 }

@@ -4,11 +4,14 @@ import * as Google from "expo-auth-session/providers/google";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import GoogleIcon from "../../assets/icons/google.svg";
 import env from "../../tokens";
-import { getUserDataFromGoogle } from "../../service/user";
+import { SocialButtonProps } from "../../models/types";
 
 WebBrowser.maybeCompleteAuthSession();
 
-export default function GoogleButton({ onSuccess, onFailure }: any) {
+export default function GoogleButton({
+  onSuccess,
+  onFailure,
+}: SocialButtonProps) {
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: env.GOOGLE_CLIENT_ID_GO,
     iosClientId: env.GOOGLE_CLIENT_ID_IOS,
@@ -19,24 +22,13 @@ export default function GoogleButton({ onSuccess, onFailure }: any) {
   React.useEffect(() => {
     if (response?.type === "success") {
       const { authentication } = response;
-
-      console.log(authentication, response);
-
-      try {
-        const rep = getUserDataFromGoogle(
-          authentication?.accessToken!,
-          Google.discovery.userInfoEndpoint!
-        );
-
-        rep.then((data) => {
-          console.info(data)
-          if (data) onSuccess(data);
-          else onFailure(data);
-        });
-      } catch (err) {
-        console.log((err as Error).message);
-        onFailure((err as Error).message);
-      }
+      onSuccess({
+        token: authentication?.accessToken,
+        url: Google.discovery.userInfoEndpoint,
+      });
+    } else {
+      const { error } = response as any;
+      if (onFailure) onFailure(error);
     }
   }, [response]);
 

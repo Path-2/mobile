@@ -1,3 +1,4 @@
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import React from "react";
 import {
   ActivityIndicator,
@@ -8,16 +9,15 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import FacebookButton from "../../components/FacebookButton";
+import GoogleButton from "../../components/GoogleButton";
 import Input from "../../components/Input";
 import { primary } from "../../configs/colors";
-import { ScreenEnum } from "../../models/enums";
 import { useTheme } from "../../hooks/theme";
+import { ScreenEnum } from "../../models/enums";
+import { FacebookUserData } from "../../models/types";
+import { googleLogin, login } from "../../service/user";
 import { Title } from "./styles";
-import GoogleButton from "../../components/GoogleButton";
-import FacebookButton from "../../components/FacebookButton";
-import { FacebookUserData, GoogleUserData } from "../../models/types";
-import { login } from "../../service/user";
-import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
 export default function SignIn({ navigation }: any) {
   const [isProcessing, setIsProcessing] = React.useState<boolean>(false);
@@ -36,24 +36,52 @@ export default function SignIn({ navigation }: any) {
 
     const response = await login({ username, password });
 
-    if (!response) {
+    if (!response || !response.jwt) {
+      setIsProcessing(false);
+      return;
     }
 
-    setItem(JSON.stringify(response));
+    setItem(JSON.stringify(response), (error) => {
+      console.error(error?.message);
+    });
 
     navigation.navigate(ScreenEnum.Signed);
 
     setIsProcessing(false);
-  }, []);
+  }, [username, password]);
 
   const handleUsername = (val: string) => setUsername(val);
+
   const handlePassword = (val: string) => setPassword(val);
+
   const handleLoginWithFacebook = (user: FacebookUserData) => {
     setIsProcessing(true);
     setUsername(user.id);
     setPassword("12345");
   };
-  const handleLoginWithGoogle = (user: GoogleUserData) => {};
+  const handleLoginWithGoogle = (authData: GoogleAuth | undefined) => {
+    if (authData) {
+      setIsProcessing(false);
+      return;
+    }
+
+    googleLogin(authData!).then((token) => {
+      if (!token || !token.jwt) {
+        setIsProcessing(false);
+        return;
+      }
+
+      setItem(JSON.stringify(token), (error) => {
+        console.error(error?.message);
+      });
+
+      navigation.navigate(ScreenEnum.Signed);
+
+      setIsProcessing(false);
+    });
+  };
+
+  const handleFailureLoginWithGoogle = () => {};
 
   return (
     <SafeAreaView
@@ -107,10 +135,8 @@ export default function SignIn({ navigation }: any) {
       </View>
       <View style={styles.loginOptions}>
         <GoogleButton
-          onFailure={(message: any) => console.error(message)}
-          onSuccess={(user: any) => {
-            setUsername(user.name);
-          }}
+          onFailure={handleFailureLoginWithGoogle}
+          onSuccess={handleLoginWithGoogle}
         />
         <FacebookButton
           onFailure={(message: any) => console.error(message)}

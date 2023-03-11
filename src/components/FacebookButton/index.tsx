@@ -5,20 +5,14 @@ import * as Facebook from "expo-auth-session/providers/facebook";
 import { ResponseType } from "expo-auth-session";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import env from "../../tokens";
-import { getUserDataFromFacebook } from "../../service/user";
-import { FacebookUserData } from "../../models/types";
+import { SocialButtonProps } from "../../models/types";
 
 WebBrowser.maybeCompleteAuthSession();
-
-type FacebookButtonProps = {
-  onSuccess: (data: FacebookUserData) => void;
-  onFailure: (message: string) => void;
-};
 
 export default function FacebookButton({
   onSuccess,
   onFailure,
-}: FacebookButtonProps) {
+}: SocialButtonProps) {
   const [request, response, promptAsync] = Facebook.useAuthRequest({
     clientId: env.FACEBOOK_CLIENT_ID,
     responseType: ResponseType.Token,
@@ -26,15 +20,14 @@ export default function FacebookButton({
 
   React.useEffect(() => {
     if (response?.type === "success") {
-      const accessToken = response.authentication?.accessToken!;
+      const { authentication } = response;
 
-      const rep = getUserDataFromFacebook(accessToken);
-
-      rep.then((data: FacebookUserData) => {
-        console.log(data);
-        if (data) onSuccess(data);
-        else onFailure(data);
+      onSuccess({
+        token: authentication?.accessToken,
       });
+    } else {
+      const { error } = response as any;
+      if (onFailure) onFailure(error);
     }
   }, [response]);
 

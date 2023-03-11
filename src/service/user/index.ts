@@ -1,3 +1,4 @@
+import { SocialAuth } from "./../../models/types";
 import axios from "axios";
 
 import { LoginData, User, UserToken } from "../../models/types";
@@ -5,7 +6,7 @@ import { LoginData, User, UserToken } from "../../models/types";
 const HOST: string = process.env.API_HOST || "http://localhost:8080/api/v1/";
 const FACEBOOK_HOST = "https://graph.facebook.com/me";
 const USER_URL: string = "users";
-const PATH2LOGIN_URL: string = "auth/login";
+const PATH2_LOGIN_URL: string = "auth/login";
 const baseURL = HOST + USER_URL;
 
 const userRequest = axios.create({ timeout: 18000 });
@@ -23,7 +24,7 @@ const googleRequest = axios.create({
 });
 
 export async function createUser(user: User) {
-  return await userRequest.post(baseURL, user);
+  return await userRequest.post(baseURL + "/signup", user);
 }
 
 export async function getUserDataFromFacebook(accessToken: string) {
@@ -53,12 +54,54 @@ export async function getUserDataFromGoogle(accessToken: string, url: string) {
 }
 
 export async function login(loginData: LoginData): Promise<UserToken | null> {
-  const { data, status } = await path2LoginRequest.post(
-    HOST + PATH2LOGIN_URL,
-    loginData
-  );
+  try {
+    const { data, status } = await path2LoginRequest.post(
+      HOST + PATH2_LOGIN_URL,
+      loginData
+    );
 
-  if (status !== 200) return null;
+    if (status !== 200) return null;
 
-  return data as UserToken;
+    return data as UserToken;
+  } catch (error: any) {
+    return null;
+  }
+}
+
+export async function googleLogin(
+  googleData: SocialAuth
+): Promise<UserToken | null> {
+  let token: UserToken;
+  try {
+    const { data } = await axios.get(HOST + PATH2_LOGIN_URL, {
+      headers: {
+        google_token: googleData.token,
+      },
+    });
+
+    token = data as UserToken;
+  } catch (error: any) {
+    return null;
+  }
+
+  return token;
+}
+
+export async function fbLogin(
+  fbData: SocialAuth
+): Promise<UserToken | null> {
+  let token: UserToken;
+  try {
+    const { data } = await axios.get(HOST + PATH2_LOGIN_URL, {
+      headers: {
+        facebook_token: fbData.token,
+      },
+    });
+
+    token = data as UserToken;
+  } catch (error: any) {
+    return null;
+  }
+
+  return token;
 }
