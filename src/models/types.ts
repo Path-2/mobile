@@ -6,7 +6,7 @@ export type InputProps = {
   disabled?: boolean;
   value?: string;
   limit?: number;
-  style?: { backgroundColor?: string; color?: string };
+  style?: { backgroundColor?: string; color?: string, fontSize?: number };
   onChange: (newValue: any) => void;
 };
 

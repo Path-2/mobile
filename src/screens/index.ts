@@ -1,4 +1,4 @@
-import Settings from "./Settings";
+import Settings from "./SettingsWrapper/Settings";
 import Home from "./Home";
 import Community from "./Community";
 import Route from "./Route";

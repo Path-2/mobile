@@ -1,14 +1,19 @@
 import React from "react";
-import { Text, StyleSheet } from "react-native";
+import { Platform, StyleSheet, Text } from "react-native";
 import MapView from "react-native-maps";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 import { useTheme } from "../../hooks/theme";
+
+import "react-native-gesture-handler";
 
 export default function Home({ route }: any) {
   const [location, setLocation] = React.useState<any>(null);
   const { colors } = useTheme();
 
   React.useEffect(() => {
+    console.log(Platform.OS);
+
     (async () => {
       let { status } = { status: "denies" };
       if (status !== "granted") {
@@ -23,22 +28,6 @@ export default function Home({ route }: any) {
     <SafeAreaView
       style={{ ...styles.container, backgroundColor: colors.primary.bg }}
     >
-      {/*Platform.OS === "web" ? (
-        <></>
-      ) : (
-        <MapView
-          style={styles.map}
-          initialRegion={{
-            latitude: 0,
-            longitude: 0,
-            latitudeDelta: 0,
-            longitudeDelta: 0,
-          }}
-          showsUserLocation
-          loadingEnabled
-          mapType="hybrid"
-        />
-        )*/}
       <Text style={{ color: colors.primary.txt }}>{route.params?.name}</Text>
     </SafeAreaView>
   );

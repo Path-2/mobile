@@ -48,7 +48,8 @@
     "react-native-svg-transformer-fix-expo": "git+https://github.com/HolovisSoftwareDev/react-native-svg-transformer-fix-expo.git",
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "~0.18.9",
-    "styled-components": "^5.3.6"
+    "styled-components": "^5.3.6",
+    "toggle-switch-react-native": "^3.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

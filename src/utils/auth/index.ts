@@ -5,6 +5,10 @@ export function setToken(data: UserToken) {
   AsyncStorage.setItem("token", JSON.stringify(data));
 }
 
+export function logout() {
+  AsyncStorage.removeItem("token")
+}
+
 export async function getToken() {
   let token = await AsyncStorage.getItem("token");
 

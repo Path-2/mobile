@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
 import { useColorScheme } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -7,7 +8,7 @@ import { darkColors, lightColors } from "./colors";
 export const ThemeContext = React.createContext({
   isDark: false,
   colors: lightColors,
-  setScheme: (schema: any) => {},
+  setScheme: (schema: "dark" | "light") => {},
 });
 
 export const ThemeProvider = (props: any) => {
@@ -25,15 +26,24 @@ export const ThemeProvider = (props: any) => {
     setIsDark(colorScheme === "dark");
   }, [colorScheme]);
 
+  React.useEffect(() => {
+    AsyncStorage.getItem("scheme").then((scheme) => {
+      if (scheme) setIsDark(scheme === "dark");
+    });
+  }, []);
+
   const defaultTheme = React.useMemo(
     () => ({
       isDark,
       // Changing color schemes according to theme
       colors: isDark ? darkColors : lightColors,
       // Overrides the isDark value will cause re-render inside the context.
-      setScheme: (scheme: any) => setIsDark(scheme === "dark"),
+      setScheme: (scheme: "dark" | "light") => {
+        AsyncStorage.setItem("scheme", scheme);
+        setIsDark(scheme === "dark");
+      },
     }),
-    []
+    [isDark]
   );
 
   return (

@@ -102,23 +102,23 @@ export default function SignIn({ navigation }: any) {
         </Text>
       </View>
       <View>
-        <Title style={{ color: colors.primary.txt }}>Login</Title>
+        <Title style={{ color: colors.primary.txt, fontSize: 18 }}>Login</Title>
         <Input
           type="email"
           icon="alternate-email"
           placeholder="Email ID or username"
           onChange={handleUsername}
-          style={{ color: colors.primary.txt }}
+          style={{ color: colors.primary.txt, fontSize: 16 }}
           value={username}
         />
         <Input
           type="password"
           icon="ios-lock-closed-outline"
           placeholder="Senha"
-          style={{ color: colors.primary.txt }}
+          style={{ color: colors.primary.txt, fontSize: 16 }}
           option={{
             child: (
-              <Text style={{ color: colors.secondary.txt }}>Esqueceu?</Text>
+              <Text style={{ color: colors.secondary.txt, fontSize: 16 }}>Esqueceu?</Text>
             ),
             action: () => {
               navigation.navigate(ScreenEnum.Forgot);
@@ -135,21 +135,21 @@ export default function SignIn({ navigation }: any) {
           {isProcessing ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={{ color: colors.primary.txtBt }}>Entrar</Text>
+            <Text style={{ color: colors.primary.txtBt, fontSize: 16 }}>Entrar</Text>
           )}
         </TouchableOpacity>
       </View>
       <View style={styles.text}>
-        <Text style={{ color: colors.primary.txt }}>Ou, entrar com</Text>
+        <Text style={{ color: colors.primary.txt, fontSize: 16 }}>Ou, entrar com</Text>
       </View>
       <View style={styles.loginOptions}>
         <GoogleButton onSuccess={handleLoginWithGoogle} />
         <FacebookButton onSuccess={handleLoginWithFacebook} />
       </View>
       <View style={styles.text}>
-        <Text style={{ color: colors.primary.txt }}>Novo no PATH2?</Text>
+        <Text style={{ color: colors.primary.txt, fontSize: 16 }}>Novo no PATH2?</Text>
         <TouchableOpacity onPress={signup} style={{ marginLeft: 3 }}>
-          <Text style={{ color: primary }}>Criar conta</Text>
+          <Text style={{ color: primary, fontSize: 16, fontWeight: "900" }}>Criar conta</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

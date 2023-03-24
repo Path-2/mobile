@@ -1,9 +1,10 @@
-import { SocialAuth, UserSocial } from "./../../models/types";
 import axios, { HttpStatusCode } from "axios";
+import { Platform } from "react-native";
 
 import { LoginData, User, UserToken } from "../../models/types";
+import { SocialAuth, UserSocial } from "./../../models/types";
 
-const HOST: string = process.env.API_HOST || "http://localhost:8080/api/v1/";
+const HOST: string = process.env.API_HOST || Platform.OS === "web" ? "http://localhost:8080/api/v1/" : "http://wkst480dsi51:8080/api/v1/";
 const FACEBOOK_HOST = "https://graph.facebook.com/me";
 const USER_URL: string = "users";
 const PATH2_LOGIN_URL: string = "auth/login";

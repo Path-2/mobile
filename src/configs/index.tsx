@@ -10,7 +10,7 @@ export const screenOptions = ({ route }: any) => ({
       case ScreenEnum.Home:
         iconName = focused ? "ios-home" : "ios-home-outline";
         break;
-      case ScreenEnum.Settings:
+      case ScreenEnum.SettingsWrapper:
         iconName = focused ? "ios-settings" : "ios-settings-outline";
         break;
       case ScreenEnum.Search:

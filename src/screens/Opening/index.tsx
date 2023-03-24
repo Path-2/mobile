@@ -54,7 +54,7 @@ export default function Opening({ navigation }: any) {
     <SafeAreaView
       style={{ ...styles.container, backgroundColor: colors.primary.bg }}
     >
-      <Text style={styles.text}>Path2</Text>
+      <Text style={{ ...styles.text, color: colors.primary.txt }}>Path2</Text>
       <Rings delay={500} />
       <Modal message={message} visible={alert} />
     </SafeAreaView>
@@ -75,5 +75,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "800",
     marginBottom: 20,
+    fontSize: 16,
   },
 });

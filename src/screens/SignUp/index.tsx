@@ -18,12 +18,7 @@ import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { createUser, createUserWithSocial } from "../../service/user";
 import * as Utils from "../../utils";
 import { Title } from "../SignIn/styles";
-import {
-  FacebookUserData,
-  SocialAuth,
-  UserCreateResponse,
-  UserSource,
-} from "../../models/types";
+import { SocialAuth, UserCreateResponse, UserSource } from "../../models/types";
 import { Modal } from "../../components";
 import GoogleButton from "../../components/GoogleButton";
 import FacebookButton from "../../components/FacebookButton";
@@ -242,13 +237,17 @@ export default function SignUp({ navigation }: any) {
         </Text>
       </View>
       <View>
-        <Title style={{ color: colors.primary.txt }}>Criar Conta</Title>
+        <Title style={{ color: colors.primary.txt, fontSize: 18 }}>
+          Criar Conta
+        </Title>
         <View style={styles.signupOptions}>
           <GoogleButton onSuccess={handleSignupWithGoogle} />
           <FacebookButton onSuccess={handleSignupWithFacebook} />
         </View>
       </View>
-      <Text style={{ marginBottom: 5, color: colors.primary.txt }}>
+      <Text
+        style={{ marginBottom: 5, color: colors.primary.txt, fontSize: 16 }}
+      >
         Ou, cria conta com...
       </Text>
       <ScrollView>
@@ -259,7 +258,7 @@ export default function SignUp({ navigation }: any) {
             placeholder={"Nome completo"}
             onChange={handleFullName}
             value={fullName}
-            style={{ color: colors.primary.txt }}
+            style={{ color: colors.primary.txt, fontSize: 16 }}
           />
           <View>
             <Input
@@ -268,10 +267,10 @@ export default function SignUp({ navigation }: any) {
               placeholder="Email ID"
               onChange={handleEmail}
               value={email}
-              style={{ color: colors.primary.txt }}
+              style={{ color: colors.primary.txt, fontSize: 16 }}
             />
             {messageInvalidEmail ? (
-              <Text style={{ color: "red" }}>{messageInvalidEmail}</Text>
+              <Text style={{ color: "red", fontSize: 16 }}>{messageInvalidEmail}</Text>
             ) : (
               <></>
             )}
@@ -284,10 +283,10 @@ export default function SignUp({ navigation }: any) {
               onChange={handlePhone}
               value={phone}
               limit={9}
-              style={{ color: colors.primary.txt }}
+              style={{ color: colors.primary.txt, fontSize: 16 }}
             />
             {messageInvalidPhone ? (
-              <Text style={{ color: "red" }}>{messageInvalidPhone}</Text>
+              <Text style={{ color: "red", fontSize: 16 }}>{messageInvalidPhone}</Text>
             ) : (
               <></>
             )}
@@ -299,10 +298,10 @@ export default function SignUp({ navigation }: any) {
               placeholder="Senha"
               onChange={handlePassword}
               value={password}
-              style={{ color: colors.primary.txt }}
+              style={{ color: colors.primary.txt, fontSize: 16 }}
             />
             {messageWarningPassword ? (
-              <Text style={{ color: "orange" }}>
+              <Text style={{ color: "orange", fontSize: 16 }}>
                 Insira pelo menos{" " + messageWarningPassword}
               </Text>
             ) : (
@@ -316,10 +315,10 @@ export default function SignUp({ navigation }: any) {
               placeholder="Confirme a senha"
               onChange={handleConfirmPassword}
               value={confirmPassword}
-              style={{ color: colors.primary.txt }}
+              style={{ color: colors.primary.txt, fontSize: 16 }}
             />
             {messageNotEqualsPassword ? (
-              <Text style={{ color: "red", marginBottom: 10 }}>
+              <Text style={{ color: "red", marginBottom: 10, fontSize: 16 }}>
                 {messageNotEqualsPassword}
               </Text>
             ) : (
@@ -336,21 +335,21 @@ export default function SignUp({ navigation }: any) {
             }
             style={{
               ...styles.signupButton,
-              backgroundColor: colors.primary.bgBt,
+              backgroundColor: colors.primary.bgBt
             }}
             onPress={handleSignup}
           >
             {isProcessing ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text style={{ color: colors.primary.txtBt }}>Criar</Text>
+              <Text style={{ color: colors.primary.txtBt, fontSize: 16 }}>Criar</Text>
             )}
           </TouchableOpacity>
         </View>
         <View style={styles.text}>
-          <Text style={{ color: colors.primary.txt }}>Já tens uma conta?</Text>
+          <Text style={{ color: colors.primary.txt, fontSize: 16 }}>Já tens uma conta?</Text>
           <TouchableOpacity onPress={signIn} style={{ marginLeft: 3 }}>
-            <Text style={{ color: primary }}>Login</Text>
+            <Text style={{ color: primary, fontSize: 16, fontWeight: "900" }}>Login</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
