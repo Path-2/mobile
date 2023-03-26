@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Dimensions,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,

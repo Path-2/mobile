@@ -5855,6 +5855,11 @@ expo-font@~11.0.1:
   dependencies:
     fontfaceobserver "^2.1.0"
 
+expo-image@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/expo-image/-/expo-image-1.0.0.tgz#a3670d20815d99e2527307a33761c9b0088823b1"
+  integrity sha512-A1amVExKhBa/eRXuceauYtPkf9izeje5AbxEWL09tgK91rf3GSIZXM5PSDGlIM0s7dpCV+Iet2jhwcFUfWaZrw==
+
 expo-keep-awake@~11.0.1:
   version "11.0.1"
   resolved "https://registry.npmjs.org/expo-keep-awake/-/expo-keep-awake-11.0.1.tgz"
@@ -5922,6 +5927,14 @@ expo-modules-core@1.0.3:
   version "1.0.3"
   resolved "https://registry.npmjs.org/expo-modules-core/-/expo-modules-core-1.0.3.tgz"
   integrity sha512-XqyA5c+zsK+cHDNVBVYu62HLBHyGMG0iWpXVP0bBQJWz0eyg5rcuEqLsnRTmoEz0YnH6QBf/cwRl+FfgnnH5Og==
+  dependencies:
+    compare-versions "^3.4.0"
+    invariant "^2.2.4"
+
+"expo-modules-core@~1.0.4 || ~1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/expo-modules-core/-/expo-modules-core-1.1.1.tgz#06502379274bdcb356fcbe225c3c6bc4926e462c"
+  integrity sha512-+AcaYmaWphIfkBcccu65dyOhWnpOJ3+SQpoI4lI/Plg1nNjOLuBjmrdVvpiJOvkN+CqbNGsJ5Yll8LLk+C107Q==
   dependencies:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
